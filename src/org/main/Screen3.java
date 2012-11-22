@@ -1,7 +1,9 @@
 package org.main;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -11,17 +13,22 @@ import java.awt.event.MouseEvent;
 import javax.swing.JFrame;
 
 
-public class Screen extends JFrame implements Runnable{
+public class Screen3 extends JFrame implements Runnable{
 	private int x,y;
 	private int xDirection, yDirection;
+	;
 	private Image dbImage;
 	private Graphics dbg;
+	Rectangle bullet;
+	int bx, by;
+	private boolean readyToFire, shot = false;
+	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	public Screen(){
+	public Screen3(){
 		//addKeyListener(new AL());
 		addKeyListener(new AL());
 		setTitle("theGame");
@@ -29,7 +36,7 @@ public class Screen extends JFrame implements Runnable{
 		setResizable(false);
 		setVisible(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		x = 20;
+		x = getWidth() / 2;
 		y = 20;
 	}
 	
@@ -50,10 +57,24 @@ public class Screen extends JFrame implements Runnable{
 	}
 	
 	public void paintComponent(Graphics g){
-		g.fillOval(x, y, 20, 20);
+		//Rectangle r = new Rectangle(rx, ry, 20, 20);
+		//Rectangle r2 = new Rectangle(175,75,10,10);
+		g.fillRect(x - 20, getHeight() - 20, 50, 10);
+		g.fillRect(x , getHeight() - 30, 10, 10);
+		
+		g.setColor(Color.RED);
+		if(shot){
+			g.setColor(Color.black);
+			g.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
+		}
 		repaint();
 	}
 
+	public void shoot(){
+		if(shot){
+			bullet.y--;
+		}
+	}
 	public class AL extends KeyAdapter{
 		@Override
 		public void keyPressed(KeyEvent e) {
@@ -64,13 +85,17 @@ public class Screen extends JFrame implements Runnable{
 			if(keyCode == KeyEvent.VK_RIGHT){
 				setxDirection(1);
 			}
-			if(keyCode == KeyEvent.VK_UP){
-				setyDirection(-1);
+			if(keyCode == KeyEvent.VK_SPACE){
+				if(bullet == null){
+					readyToFire = true;
+				}else{ // x , getHeight() - 30
+					bx = x;
+					by = getHeight() - 30;
+					bullet = new Rectangle(bx,by,3,5);
+					shot = true;
+				}
 			}
 			
-			if(keyCode == KeyEvent.VK_DOWN){
-				setyDirection(+1);
-			}	
 		}
 		
 		@Override
@@ -82,6 +107,14 @@ public class Screen extends JFrame implements Runnable{
 			if(keyCode == KeyEvent.VK_UP || keyCode == KeyEvent.VK_DOWN ){
 				setyDirection(0);
 			}
+			if(keyCode == KeyEvent.VK_SPACE){
+				readyToFire = false;
+				if(bullet.y <= -5 ){
+					bullet = new Rectangle(0,0,0,0);
+					shot = false;
+					readyToFire = false;
+				}
+			}
 			
 		}	
 	}
@@ -91,10 +124,6 @@ public class Screen extends JFrame implements Runnable{
 	private void move(){
 		x+= xDirection;
 		y+= yDirection;
-		if(x >= 480) x = 480;
-		if(x <= 0 ) x = 0;
-		if(y >= 480 ) y = 480;
-		if(y <= 20 ) y = 20;
 	}
 
 	@Override
@@ -102,6 +131,7 @@ public class Screen extends JFrame implements Runnable{
 		while(true){
 			
 			try {
+				shoot();
 				move();
 				Thread.sleep(5);
 			} catch (InterruptedException e) {
