@@ -8,6 +8,7 @@ public class Missile {
 	private double cx, cy;
 	private double dx, dy;
 	private double speed;
+	private boolean exp;
 	
 	public Missile(int ix, int iy, int gx, int gy, double speed) {
 		this.speed = speed;
@@ -22,7 +23,10 @@ public class Missile {
 		this(ix,iy,gx,gy, DEFAULT_SPEED);
 	}
 
+	
 	private void setParameters() {
+		exp = false;
+		
 		cx = ix;
 		cy = iy;
 
@@ -32,6 +36,14 @@ public class Missile {
 		double distance = Math.sqrt(dx * dx + dy * dy);
 		dx = (dx / distance) * speed;
 		dy = (dy / distance) * speed;
+	}
+	
+	public int getX(){
+		return (int)cx;
+	}
+	
+	public int getY(){
+		return  (int)cy;
 	}
 
 	public void draw(Graphics g) {
@@ -61,7 +73,11 @@ public class Missile {
 			// its fired from the bottom
 			doney = cy - gy < 0;
 
-		return done && doney;
+		return (done && doney) || exp;
+	}
+
+	public void exploded(boolean b) {
+		exp = true;
 	}
 
 };
