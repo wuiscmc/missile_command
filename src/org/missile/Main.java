@@ -1,5 +1,7 @@
 package org.missile;
 
+import org.missile.controller.Controller;
+
 public class Main {
 
 	/**
