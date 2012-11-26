@@ -1,14 +1,18 @@
 package org.missile;
 
 import java.awt.Graphics;
+import java.util.List;
+import java.util.Vector;
 
 
-public class Base {
+public class Base implements Drawable{
 
 	private double x,y;
 	private int ix, iy;
 	private double angle; 
 	private int bx, by, heigth, width, gunLength;
+
+	
 	public Base(int bx, int by, int heigth, int width, int gunLength){
 		
 		this.bx = bx;
@@ -54,6 +58,8 @@ public class Base {
 		return (int)y;
 	}
 	
-
-
+	
+	
+	
+	
 }

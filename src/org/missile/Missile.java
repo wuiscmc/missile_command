@@ -2,7 +2,7 @@ package org.missile;
 
 import java.awt.Graphics;
 
-public class Missile {
+public class Missile implements Drawable {
 	private static int DEFAULT_SPEED = 10;
 	private int ix, iy, gx, gy;
 	private double cx, cy;

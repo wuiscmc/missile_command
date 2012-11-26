@@ -2,7 +2,7 @@ package org.missile;
 
 import java.awt.Graphics;
 
-public class Explosion {
+public class Explosion implements Drawable {
 	private int x, y, r;
 	private int speed;
 
