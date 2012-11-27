@@ -40,10 +40,6 @@ public class Missile extends Drawable {
 	}
 	
 
-	//public void draw() {
-		//g.drawLine(ix, iy, (int) cx, (int) cy);
-	//}
-
 	public void move() {
 		cx = cx + dx;
 		if (iy <= gy) 

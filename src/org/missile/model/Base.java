@@ -40,6 +40,12 @@ public class Base extends Drawable {
 		this.y = y;
 		recalculate();
 	}
+	
+	public double distanceBase(int x, int y){
+		int dx = (bx + width/2) - x; 
+		int dy = (by + heigth/2) - y;
+		return Math.sqrt(dx*dx + dy*dy);
+	}
 
 	public int getX() {
 		return (int) x;

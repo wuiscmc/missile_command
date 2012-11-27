@@ -2,7 +2,6 @@ package org.missile.view;
 
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
@@ -17,25 +16,25 @@ import org.missile.model.Explosion;
 import org.missile.model.Missile;
 
 public class Canvas extends JFrame implements Runnable, Drawer {
-
+	private int width, height; 
 	private Image img;
 	private Graphics dbg;
-
 	private Game controller;
 	private List<Drawable> screenElement;
 
 	/**
 	 * @param args
 	 */
-	public Canvas(Game c) {
+	public Canvas(Game c, int width, int height) {
 		
 		controller = c;
-		setSize(500, 500);
+		this.width = width; 
+		this.height = height;
+		setSize(width, height);
 		setTitle("Missile command");
 		setVisible(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-
 		addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
 				controller.shootMissile(e.getX(), e.getY());
@@ -72,11 +71,11 @@ public class Canvas extends JFrame implements Runnable, Drawer {
 	}
 
 	public void paintComponent(Graphics g) {
-		
-		for (int i = 0; i < screenElement.size(); i++) {
-			drawElement(g, screenElement.get(i)) ;
+		if(screenElement != null){
+			for (int i = 0; i < screenElement.size(); i++) {
+				screenElement.get(i).draw(g);
+			}
 		}
-			
 		repaint();
 	}
 
@@ -94,6 +93,14 @@ public class Canvas extends JFrame implements Runnable, Drawer {
 		}
 	}
 
+	
+	public int getWidth(){
+		return width;
+	}
+	
+	public int getHeight(){
+		return height;
+	}
 	
 	@Override
 	public void drawElement(Graphics g, Drawable d) {
