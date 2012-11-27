@@ -47,6 +47,7 @@ public class Base extends Drawable {
 		return Math.sqrt(dx*dx + dy*dy);
 	}
 
+	
 	public int getX() {
 		return (int) x;
 	}

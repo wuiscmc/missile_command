@@ -1,5 +1,8 @@
 package org.missile.model;
 
+import java.util.List;
+import java.util.Vector;
+
 import org.missile.view.Drawable;
 
 public class Missile extends Drawable {
@@ -67,7 +70,7 @@ public class Missile extends Drawable {
 	}
 
 	public void exploded(boolean b) {
-		exp = true;
+		exp = b;
 	}
 
 	public int getX(){
@@ -86,6 +89,25 @@ public class Missile extends Drawable {
 		return  iy;
 	}
 	
+	public List<Drawable> collisions(List<City> cities) {
+		List<Drawable> citiesExploded = new Vector<Drawable>();
+		for (City c : cities) {
+			if (c.containsPoint(getX(), getY())) {
+				exploded(true);
+				c.setDestroyed(true);
+				citiesExploded.add(c);
+			}
+		}
+		return citiesExploded;
+	}
+	
+	public Explosion explodeMissile() {
+		return new Explosion(getX(), getY());
+	}
+	
+	
+
+
 	
 	
 };

@@ -13,10 +13,11 @@ import org.missile.controller.Game;
 import org.missile.model.Base;
 import org.missile.model.City;
 import org.missile.model.Explosion;
+import org.missile.model.LogicObserver;
 import org.missile.model.Missile;
 
-public class Canvas extends JFrame implements Runnable, Drawer {
-	private int width, height; 
+public class Canvas extends JFrame implements Runnable, Drawer, LogicObserver {
+	
 	private Image img;
 	private Graphics dbg;
 	private Game controller;
@@ -28,8 +29,7 @@ public class Canvas extends JFrame implements Runnable, Drawer {
 	public Canvas(Game c, int width, int height) {
 		
 		controller = c;
-		this.width = width; 
-		this.height = height;
+		
 		setSize(width, height);
 		setTitle("Missile command");
 		setVisible(true);
@@ -46,45 +46,26 @@ public class Canvas extends JFrame implements Runnable, Drawer {
 			public void mouseMoved(MouseEvent e) {
 				controller.aimGun(e.getX(), e.getY());
 			}
-
 		});
+		
 	}
 
-	public void paint(Graphics g) {
-		img = createImage(getWidth(), getHeight());
-		dbg = img.getGraphics();
-		paintComponent(dbg);
-		g.drawImage(img, 0, 0, this);
-	}
-
-	public void addScreenElement(Drawable d) {
-		if(screenElement == null) screenElement = new Vector<Drawable>();
-		screenElement.add(d);
-	}
-
-	public void deleteScreenElement(Drawable d) {
-		screenElement.remove(d);
-	}
-
-	public void deleteScreenAllElement(List<Drawable> elements) {
-		screenElement.removeAll(elements);
-	}
-
-	public void paintComponent(Graphics g) {
-		if(screenElement != null){
-			for (int i = 0; i < screenElement.size(); i++) {
-				screenElement.get(i).draw(g);
-			}
-		}
-		repaint();
-	}
 
 	public void run() {
+		int baseHeight = 50, baseWidth = 50, gunHeight = 20; 
+		
+		controller.addBase(150, getHeight() - baseHeight, baseWidth, baseHeight, gunHeight);
+		controller.addBase(275, getHeight() - baseHeight, baseWidth, baseHeight, gunHeight);
+		controller.addBase(400, getHeight() - baseHeight, baseWidth, baseHeight, gunHeight);
+		
+		
+		
 		while (true) {
 			try {
-				controller.fireEnemy();
-				controller.moveMissiles();
-
+				int ix = (int) ((Math.random() * 1000) % getWidth() - 20 + 20);
+				int dx = (int) ((Math.random() * 1000) % getWidth() - 20 + 20);
+				controller.shootEnemyMissile(ix, 0, dx, 500);
+				controller.moveElements();
 				Thread.sleep(15);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
@@ -94,14 +75,25 @@ public class Canvas extends JFrame implements Runnable, Drawer {
 	}
 
 	
-	public int getWidth(){
-		return width;
+	public void paint(Graphics g) {
+		img = createImage(getWidth(), getHeight());
+		dbg = img.getGraphics();
+		paintComponent(dbg);
+		g.drawImage(img, 0, 0, this);
 	}
-	
-	public int getHeight(){
-		return height;
+
+
+
+	public void paintComponent(Graphics g) {
+		if(screenElement != null){
+			for (int i = 0; i < screenElement.size(); i++) {
+				//screenElement.get(i).draw(g);
+				drawElement(g, screenElement.get(i));
+			}
+		}
+		repaint();
 	}
-	
+
 	@Override
 	public void drawElement(Graphics g, Drawable d) {
 		if (d instanceof Base) {
@@ -126,6 +118,24 @@ public class Canvas extends JFrame implements Runnable, Drawer {
 		}
 	}
 
+	@Override
+	public void newElement(Drawable d) {
+		if(screenElement == null) screenElement = new Vector<Drawable>();
+		screenElement.add(d);
+		
+	}
+
+
+	@Override
+	public void removeElement(Drawable d) {
+		screenElement.remove(d);
+	}
+
+
+	@Override
+	public void removeElementCollection(List<Drawable> list) {
+		screenElement.removeAll(list);
+	}
 
 
 }

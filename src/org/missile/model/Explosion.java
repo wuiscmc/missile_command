@@ -1,5 +1,7 @@
 package org.missile.model;
 
+import java.util.List;
+
 import org.missile.view.Drawable;
 
 public class Explosion extends Drawable{
@@ -31,4 +33,17 @@ public class Explosion extends Drawable{
 		return r;
 	}
 
+	public void collisions(List<Missile> missiles) {
+		for (Missile m : missiles) {
+			double a = getY() - m.getY();
+			double b = getX() - m.getX();
+			double r = getR();
+
+			if ((a * a + b * b) < (r * r)) {
+				m.exploded(true);
+			}
+		}
+	}
+
+	
 }
