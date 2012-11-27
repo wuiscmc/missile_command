@@ -1,8 +1,9 @@
 package org.missile.model;
 
-import java.awt.Graphics;
+import org.missile.view.Drawable;
 
-public class Missile implements Drawable {
+public class Missile extends Drawable {
+	
 	private static int DEFAULT_SPEED = 10;
 	private int ix, iy, gx, gy;
 	private double cx, cy;
@@ -38,17 +39,10 @@ public class Missile implements Drawable {
 		dy = (dy / distance) * speed;
 	}
 	
-	public int getX(){
-		return (int)cx;
-	}
-	
-	public int getY(){
-		return  (int)cy;
-	}
 
-	public void draw(Graphics g) {
-		g.drawLine(ix, iy, (int) cx, (int) cy);
-	}
+	//public void draw() {
+		//g.drawLine(ix, iy, (int) cx, (int) cy);
+	//}
 
 	public void move() {
 		cx = cx + dx;
@@ -80,4 +74,22 @@ public class Missile implements Drawable {
 		exp = true;
 	}
 
+	public int getX(){
+		return (int)cx;
+	}
+	
+	public int getY(){
+		return  (int)cy;
+	}
+	
+	public int getIX(){
+		return ix;
+	}
+	
+	public int getIY(){
+		return  iy;
+	}
+	
+	
+	
 };

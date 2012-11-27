@@ -1,29 +1,46 @@
 package org.missile.model;
 
-import java.awt.Graphics;
-import java.awt.Rectangle;
+import org.missile.view.Drawable;
 
-public class City implements Drawable {
+public class City extends Drawable {
 	private boolean destroyed;
-	private Rectangle r;
-	public City(int x, int y , int w, int h){
-		r = new Rectangle(x,y,w,h);
+	int x1, y1, width, height;
+
+	public City(int x, int y, int width, int height) {
+		x1 = x; 
+		y1 = y; 
+		this.width = width; 
+		this.height = height;
 		destroyed = false;
 	}
-	
-	public void draw(Graphics g){
-		g.drawRect(r.x, r.y, r.width, r.height);
+
+	public boolean containsPoint(int x, int y) {
+		int x2 = x1 + width;
+		int y2 = y1 + height;
+		return (x < x2 && x > x1) && (y < y2 && y > y1);
 	}
-	
-	public Rectangle getRectangle(){
-		return r;
+
+	public int getX() {
+		return x1;
 	}
-	
-	public void setDestroyed(boolean destroyed){
+
+	public int getY() {
+		return y1;
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
+	public void setDestroyed(boolean destroyed) {
 		this.destroyed = destroyed;
 	}
-	
-	public boolean getDestroyed(){
+
+	public boolean getDestroyed() {
 		return destroyed;
 	}
 }

@@ -1,20 +1,14 @@
 package org.missile.model;
 
-import java.awt.Graphics;
+import org.missile.view.Drawable;
 
-public class Explosion implements Drawable {
+public class Explosion extends Drawable{
 	private int x, y, r;
-	private int speed;
-
+	
 	public Explosion(int x, int y) {
 		this.x = x;
 		this.y = y;
-		speed = 1;
 		r = 1;
-	}
-
-	public void draw(Graphics g) {
-		g.fillOval(x - r / 2, y - r / 2, r, r);
 	}
 
 	public void move() {

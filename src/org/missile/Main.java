@@ -1,6 +1,6 @@
 package org.missile;
 
-import org.missile.controller.Controller;
+import org.missile.controller.Game;
 
 public class Main {
 
@@ -8,7 +8,7 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		Controller c = new Controller();
+		Game c = new Game();
 		c.startGame();
 	}
 

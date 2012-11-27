@@ -5,34 +5,34 @@ import java.util.Vector;
 
 import org.missile.model.Base;
 import org.missile.model.City;
-import org.missile.model.Drawable;
 import org.missile.model.Explosion;
 import org.missile.model.Missile;
-import org.missile.view.View;
+import org.missile.view.Canvas;
+import org.missile.view.Drawable;
 
-public class Controller {
+public class Game {
 
-	private boolean shoot;
 	private Base base;
 	private Vector<Missile> enemyMissiles;
 	private Vector<Missile> missiles;
 	private Vector<Explosion> explosions;
 	private Vector<City> cities;
-	
-	private View v;
 
-	public Controller() {
-		v = new View(this);
+	private Canvas v;
 
+	public Game() {
+		
 		enemyMissiles = new Vector<Missile>();
 		missiles = new Vector<Missile>();
 		explosions = new Vector<Explosion>();
 		
+		v = new Canvas(this);
 		base = new Base(230, 490, 10, 20, 50);
-		v.addScreenElement(base);
-
+		addElement(base, null);
+		
 		cities = new Vector<City>();
 		setCities();
+		
 	}
 
 	public void startGame() {
@@ -40,26 +40,23 @@ public class Controller {
 		c.start();
 	}
 
-	private void collisions(Explosion e) {
-		for (Missile m : enemyMissiles) {
-			double a = e.getY() - m.getY();
-			double b = e.getX() - m.getX();
-			double r = e.getR();
-			
-			if ((a * a + b * b) < (r*r)) {
-				m.exploded(true);
-			}
-			
+	private void setCities() {
+		addElement(new City(41, 450, 41, 50), cities);
+		
+		int x = 0;
+		for (int i = 0; i < 3; i++) {
+			x = (50 + x) + 50 * 2;
+			addElement(new City(x, 450, 41, 50), cities);
 		}
 	}
 
 	public void moveMissiles() {
+		
 		for (int i = 0; i < missiles.size(); i++) {
 			Missile m = missiles.get(i);
 			if (m.done()) {
 				explodeMissile(m);
-				missiles.remove(m);
-				v.deleteScreenElement(m);
+				removeElement(m, missiles);
 			} else {
 				m.move();
 			}
@@ -69,21 +66,17 @@ public class Controller {
 			Missile m = enemyMissiles.get(i);
 			if (m.done()) {
 				explodeMissile(m);
-				enemyMissiles.remove(m);
-				v.deleteScreenElement(m);
+				removeElement(m, enemyMissiles);
 			} else {
 				m.move();
-				List<Drawable> reachedCities = reachedCity(m);
-				v.deleteScreenAllElement(reachedCities);
-				cities.removeAll(reachedCities);
+				removeAllElement(reachedCity(m), cities);
 			}
 		}
 
 		for (int i = 0; i < explosions.size(); i++) {
 			Explosion e = explosions.get(i);
 			if (e.done()) {
-				explosions.remove(e);
-				v.deleteScreenElement(e);
+				removeElement(e, explosions);
 			} else {
 				e.move();
 				collisions(e);
@@ -95,35 +88,32 @@ public class Controller {
 		if (Math.random() * 100 > 99.5) {
 			int bx = (int) ((Math.random() * 1000) % 480 + 20);
 			int ex = (int) ((Math.random() * 1000) % 480 + 20);
-			Missile m = new Missile(bx, 0, ex, 500, 0.5);
-			enemyMissiles.add(m);
-			v.addScreenElement(m);
+			addElement(new Missile(bx, 0, ex, 500, 0.5), enemyMissiles);
 		}
 	}
 
 	private void explodeMissile(Missile m) {
-		Explosion e = new Explosion(m.getX(), m.getY());
-		explosions.add(e);
-		v.addScreenElement(e);
+		addElement(new Explosion(m.getX(), m.getY()), explosions);
 	}
 
-	private void setCities() {
-		City c = new City(41, 450, 41, 50);
-		cities.add(c);
-		v.addScreenElement(c);
-		int x = 0;
-		for (int i = 0; i < 3; i++) {
-			x = (50 + x) + 50 * 2;
-			City c2 = new City(x, 450, 41, 50);
-			cities.add(c2);
-			v.addScreenElement(c2);
+	
+	private void collisions(Explosion e) {
+		for (Missile m : enemyMissiles) {
+			double a = e.getY() - m.getY();
+			double b = e.getX() - m.getX();
+			double r = e.getR();
+
+			if ((a * a + b * b) < (r * r)) {
+				m.exploded(true);
+			}
+
 		}
 	}
-
+	
 	private List<Drawable> reachedCity(Missile m) {
 		List<Drawable> citiesExploded = new Vector<Drawable>();
 		for (City c : cities) {
-			if (c.getRectangle().contains(m.getX(), m.getY())) {
+			if (c.containsPoint(m.getX(), m.getY())) {
 				m.exploded(true);
 				c.setDestroyed(true);
 				citiesExploded.add(c);
@@ -133,12 +123,26 @@ public class Controller {
 	}
 
 	public void shootMissile(int x, int y) {
-		Missile m = new Missile(base.getX(), base.getY(), x, y, 5);
-		missiles.add(m);
-		v.addScreenElement(m);
+		addElement(new Missile(base.getX(), base.getY(), x, y, 5), missiles);
 	}
 
 	public void aimGun(int x, int y) {
 		base.aimGun(x, y);
+	}
+	
+	private void addElement(Drawable element, List collection){
+		if(collection != null) collection.add(element);
+		v.addScreenElement(element);
+		element.addDrawer(v);
+	}
+	
+	private void removeElement(Drawable d, List collection){
+		if(collection != null) collection.remove(d);
+		v.deleteScreenElement(d);
+	}
+	
+	private void removeAllElement(List d, List collection){
+		if(collection != null) collection.removeAll(d);
+		v.deleteScreenAllElement(d);
 	}
 }
