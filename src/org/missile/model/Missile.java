@@ -184,7 +184,7 @@ public class Missile implements Drawable {
 	}
 	
 	/**
-	 * @return a {@link Explosion}Êthat occurs at the point of the missile.
+	 * @return a {@link Explosion}ï¿½that occurs at the point of the missile.
 	 */
 	public Explosion getExplosion() {
 		return new Explosion(getX(), getY());

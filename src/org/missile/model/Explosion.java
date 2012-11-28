@@ -1,6 +1,7 @@
 package org.missile.model;
 
 import java.util.List;
+import java.util.Vector;
 
 import org.missile.view.Drawable;
 
@@ -99,7 +100,8 @@ public class Explosion implements Drawable {
 	 * @param missiles
 	 *            a List of {@link Missile}
 	 */
-	public void collisions(List<Missile> missiles) {
+	public List<Drawable> collisions(List<Missile> missiles) {
+		List<Drawable> explodedMissiles = new Vector<Drawable>();
 		for (Missile m : missiles) {
 			double a = getY() - m.getY();
 			double b = getX() - m.getX();
@@ -109,6 +111,7 @@ public class Explosion implements Drawable {
 				m.setExploded(true);
 			}
 		}
+		return explodedMissiles;
 	}
 
 }
