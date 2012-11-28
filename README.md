@@ -1,4 +1,4 @@
-java_test
+Missile command 
 =========
 
-java game development testing
+Implementation in Java, following the MVC architectural pattern of the classic Missile Command game. 
