@@ -30,7 +30,11 @@ public class Missile implements Drawable {
 	/**
 	 * Constructor of the Missile class.
 	 * <p>
-	 * It initializes all the parameters of the missile.
+	 * It initializes all the parameters of the missile and calculates a
+	 * template needed by the guidance missile guidance system. The movement of
+	 * the missile follows the <a
+	 * href="http://en.wikipedia.org/wiki/Pythagorean_theorem"> Pythagorean
+	 * Theorem</a>. 
 	 * 
 	 * @param ix
 	 *            origin x coordinate
@@ -52,22 +56,6 @@ public class Missile implements Drawable {
 		this.explode = false;
 		cx = ix;
 		cy = iy;
-		setParameters();
-	}
-
-	public Missile(int ix, int iy, int gx, int gy) {
-		this(ix, iy, gx, gy, DEFAULT_SPEED);
-	}
-
-	/**
-	 * Calculates a template used to guide the missile.
-	 * <p>
-	 * The missile guidance system is based on the <a
-	 * href="http://en.wikipedia.org/wiki/Pythagorean_theorem"> Pythagorean
-	 * Theorem</a>
-	 * 
-	 */
-	private void setParameters() {
 
 		dx = gx - ix;
 		dy = Math.abs(gy - iy);
@@ -75,6 +63,10 @@ public class Missile implements Drawable {
 		double distance = Math.sqrt(dx * dx + dy * dy);
 		dx = (dx / distance) * speed;
 		dy = (dy / distance) * speed;
+	}
+
+	public Missile(int ix, int iy, int gx, int gy) {
+		this(ix, iy, gx, gy, DEFAULT_SPEED);
 	}
 
 	/**
@@ -163,12 +155,30 @@ public class Missile implements Drawable {
 	public int getIY() {
 		return iy;
 	}
-
+	
+	/**
+	 * Getter for dx
+	 * @return double. delta x axis coordinate of the missile.
+	 */
+	public double getDX(){
+		return dx;
+	}
+	
+	/**
+	 * Getter for dx
+	 * @return double. delta y axis coordinate of the missile.
+	 */
+	public double getDY(){
+		return dy;
+	}
+	
 	/**
 	 * Checks if there are any cities which have been reached by the missile. In
 	 * case there are any, they'll be destroyed and the missile will explode.
 	 * 
-	 * @param cities a List of {@link City} containing the remaining cities in the system
+	 * @param cities
+	 *            a List of {@link City} containing the remaining cities in the
+	 *            system
 	 * @return a {@link List} of {@link Drawable} impacted by the missile
 	 */
 	public List<Drawable> collisions(List<City> cities) {
@@ -182,7 +192,7 @@ public class Missile implements Drawable {
 		}
 		return citiesExploded;
 	}
-	
+
 	/**
 	 * @return a {@link Explosion}�that occurs at the point of the missile.
 	 */

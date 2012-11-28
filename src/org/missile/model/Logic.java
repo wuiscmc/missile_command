@@ -94,43 +94,13 @@ public class Logic {
 
 	/**
 	 * Checks whether the elements of the system have reached their goal and/or
-	 * they have collide with another element.
+	 * they have collided with another element. 
 	 */
 	public void moveElements() {
-
-		for (int i = 0; i < missiles.size(); i++) {
-			Missile m = missiles.get(i);
-			if (m.done()) {
-				addElement(m.getExplosion(), explosions); // Whenever a
-															// missile reaches
-															// its goal, it
-															// explodes.
-				removeElement(m, missiles); // since it has exploded, we remove
-											// the missile from list of
-											// missiles.
-			} else {
-				m.move();
-				List<Drawable> destroyedCities = m.collisions(cities);
-				removeAllElement(destroyedCities, cities); // we remove all the
-															// destroyedCities
-															// from the system.
-			}
-		}
-
-		for (int i = 0; i < explosions.size(); i++) {
-			Explosion e = explosions.get(i);
-			if (e.done()) {
-				removeElement(e, explosions);
-			} else {
-				e.move();
-				// we don't need to remove any missiles manually.
-				// they will just marked as "done" and in the next iteration
-				// will explode. This will lead to on cascade explosions.
-				e.collisions(missiles);
-
-			}
-		}
+		moveMissiles();
+		moveExplosions();
 	}
+
 
 	/**
 	 * Shoots an enemy missile with an uncertain probability.
@@ -164,36 +134,6 @@ public class Logic {
 				ENEMY_MISSILE_DEFAULT_SPEED);
 	}
 
-	/**
-	 * Gives the order to the closest base to load its gun and aim to a given
-	 * coordinates.
-	 * 
-	 * @param x
-	 *            destination x axis coordinate
-	 * @param y
-	 *            destination y axis coordinate
-	 */
-	public void aimGun(int x, int y) {
-		getClosestBase(x, y).aimGun(x, y);
-	}
-
-	/**
-	 * Given a point, it returns the closest base to it.
-	 * 
-	 * @param x
-	 *            x axis coordinate
-	 * @param y
-	 *            y axis coordinate
-	 * @return the closest base to that point
-	 */
-	private Base getClosestBase(int x, int y) {
-		Base b = null;
-		for (Base base : bases) {
-			if (b == null || b.distanceBase(x, y) > base.distanceBase(x, y))
-				b = base;
-		}
-		return b;
-	}
 
 	/**
 	 * Shoots from the closest base an ally missile at one given point.
@@ -207,7 +147,21 @@ public class Logic {
 		Base b = getClosestBase(x, y);
 		addElement(new Missile(b.getX(), b.getY(), x, y, 5), missiles);
 	}
-
+	
+	/**
+	 * Gives the order to the closest base to load its gun and aim to a given
+	 * coordinates.
+	 * 
+	 * @param x
+	 *            destination x axis coordinate
+	 * @param y
+	 *            destination y axis coordinate
+	 */
+	public void aimGun(int x, int y) {
+		getClosestBase(x, y).aimGun(x, y);
+	}
+	
+	
 	/**
 	 * Observable model helpers
 	 */
@@ -277,6 +231,69 @@ public class Logic {
 		for (LogicObserver observer : observers) {
 			observer.removeElementCollection(collection);
 		}
+	}
+	
+	/**
+	 * Guides the missiles and checks whether they have hit their target.
+	 * 
+	 */
+	private void moveMissiles() {
+		for (int i = 0; i < missiles.size(); i++) {
+			Missile m = missiles.get(i);
+			if (m.done()) {
+				addElement(m.getExplosion(), explosions); // Whenever a
+															// missile reaches
+															// its goal, it
+															// explodes.
+				removeElement(m, missiles); // since it has exploded, we remove
+											// the missile from list of
+											// missiles.
+			} else {
+				m.move();
+				List<Drawable> destroyedCities = m.collisions(cities);
+				removeAllElement(destroyedCities, cities); // we remove all the
+															// destroyedCities
+															// from the system.
+			}
+		}
+	}
+
+	/**
+	 * Expands the explosions
+	 * 
+	 */
+	private void moveExplosions() {
+		for (int i = 0; i < explosions.size(); i++) {
+			Explosion e = explosions.get(i);
+			if (e.done()) {
+				removeElement(e, explosions);
+			} else {
+				e.move();
+				// we don't need to remove any missiles manually.
+				// they will just marked as "done" and in the next iteration
+				// will explode. This will lead to on cascade explosions.
+				e.collisions(missiles);
+			}
+		}
+	}
+
+	
+	/**
+	 * Given a point, it returns the closest base to it.
+	 * 
+	 * @param x
+	 *            x axis coordinate
+	 * @param y
+	 *            y axis coordinate
+	 * @return the closest base to that point
+	 */
+	private Base getClosestBase(int x, int y) {
+		Base b = null;
+		for (Base base : bases) {
+			if (b == null || b.distanceBase(x, y) > base.distanceBase(x, y))
+				b = base;
+		}
+		return b;
 	}
 
 }
