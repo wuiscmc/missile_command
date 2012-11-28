@@ -1,25 +1,12 @@
 package org.missile.view;
 
-import java.awt.Graphics;
-import java.util.List;
-import java.util.Vector;
+/**
+ * This interface is written by convenience so we could apply polymorphism and
+ * handle a lists of Drawable objects instead of many of type.
+ * 
+ * @author Luis Carlos Mateos
+ * 
+ */
+public interface Drawable {
 
-public abstract class Drawable {
-	
-	private List<Drawer> drawers;
-	
-	public void draw(Graphics g){
-		for(Drawer d: drawers){
-			d.drawElement(g, this);
-		}
-	}
-	
-	public void addDrawer(Drawer d){
-		if(drawers == null) drawers = new Vector<Drawer>();
-		drawers.add(d);
-	}
-	
-	public void removeDrawer(Drawer d){
-		drawers.remove(d);
-	}
 }
