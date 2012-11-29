@@ -1,10 +1,10 @@
-package org.missile.model.business.missile;
+package org.missile.model.missile;
 
 import java.util.List;
 import java.util.Vector;
 
-import org.missile.model.GameElement;
-import org.missile.model.business.explosion.Explosion;
+import org.missile.model.explosion.Explosion;
+import org.missile.model.template.GameElement;
 import org.missile.view.Drawable;
 
 /**

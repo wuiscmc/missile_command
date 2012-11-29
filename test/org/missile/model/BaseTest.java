@@ -3,7 +3,7 @@ package org.missile.model;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
-import org.missile.model.business.base.Base;
+import org.missile.model.base.Base;
 
 public class BaseTest {
 

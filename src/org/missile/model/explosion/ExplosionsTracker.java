@@ -1,9 +1,9 @@
-package org.missile.model.business.explosion;
+package org.missile.model.explosion;
 
-import org.missile.model.GameElement;
-import org.missile.model.GameElementObserver;
-import org.missile.model.GameElementTracker;
-import org.missile.model.business.missile.Missile;
+import org.missile.model.missile.Missile;
+import org.missile.model.template.GameElement;
+import org.missile.model.template.GameElementObserver;
+import org.missile.model.template.GameElementTracker;
 
 public class ExplosionsTracker extends GameElementTracker implements GameElementObserver {
 

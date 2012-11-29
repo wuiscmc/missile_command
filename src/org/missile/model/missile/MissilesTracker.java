@@ -1,10 +1,10 @@
-package org.missile.model.business.missile;
+package org.missile.model.missile;
 
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
-import org.missile.model.GameElementTracker;
+import org.missile.model.template.GameElementTracker;
 import org.missile.view.Drawable;
 
 public class MissilesTracker extends GameElementTracker {

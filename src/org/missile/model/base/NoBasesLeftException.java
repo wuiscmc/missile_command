@@ -1,4 +1,4 @@
-package org.missile.model.business.base;
+package org.missile.model.base;
 
 public class NoBasesLeftException extends Exception {
 	

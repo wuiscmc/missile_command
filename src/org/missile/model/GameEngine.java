@@ -3,13 +3,16 @@ package org.missile.model;
 import java.util.List;
 import java.util.Vector;
 
-import org.missile.model.business.base.Base;
-import org.missile.model.business.base.BaseTracker;
-import org.missile.model.business.base.NoBasesLeftException;
-import org.missile.model.business.explosion.ExplosionsTracker;
-import org.missile.model.business.missile.Missile;
-import org.missile.model.business.missile.MissilesTracker;
+import org.missile.model.base.Base;
+import org.missile.model.base.BaseTracker;
+import org.missile.model.base.NoBasesLeftException;
 import org.missile.model.city.City;
+import org.missile.model.explosion.ExplosionsTracker;
+import org.missile.model.missile.Missile;
+import org.missile.model.missile.MissilesTracker;
+import org.missile.model.template.GameElement;
+import org.missile.model.template.GameElementObserver;
+import org.missile.model.template.GameElementTracker;
 import org.missile.view.Drawable;
 
 /**
@@ -107,9 +110,7 @@ public class GameEngine implements GameElementObserver {
 	 * @param height
 	 */
 	public void addCity(int x, int y, int width, int height) {
-		City c = new City(x, y, width, height);
-		cities.add(c);
-		notifyElementAdded(c);
+		cities.add(new City(x, y, width, height));
 	}
 
 	/**
@@ -202,7 +203,7 @@ public class GameEngine implements GameElementObserver {
 	 * 
 	 * @param observer
 	 */
-	public void registerObserver(GameEngineObserver observer) {
+	public void addObserver(GameEngineObserver observer) {
 		observers.add(observer);
 	}
 
@@ -215,62 +216,20 @@ public class GameEngine implements GameElementObserver {
 		observers.remove(observer);
 	}
 
-	/**
-	 * This function stores an element into a list and notifies the observers
-	 * about a new element has been created in the system.
-	 * 
-	 * @param element
-	 *            a {@link Drawable} element newly created
-	 * @param list
-	 *            a generic List
-	 */
-	private void notifyElementAdded(Drawable element) {
-		for (GameEngineObserver observer : observers)
-			observer.newElement(element);
-	}
-
-	/**
-	 * Removes an {@link Drawable} element from the given list and notifies
-	 * observers. The removal of an element means that element does not exist
-	 * anymore and should not be displayed.
-	 * 
-	 * @param element
-	 *            a {@link Drawable} element which will be removed
-	 * @param list
-	 *            a generic List
-	 */
-	private void notifyElementRemoved(Drawable element) {
-		for (GameEngineObserver observer : observers) {
-			observer.removeElement(element);
-		}
-	}
-
-	/**
-	 * Removes a collection of {@link Drawable} elements from a list and
-	 * notifies the model observers.
-	 * 
-	 * @param collection
-	 *            List of {@link Drawable}. The collection which will be removed
-	 * @param list
-	 *            a generic List
-	 */
-	private void notifyCollectionRemoved(List<Drawable> collection) {
-		for (GameEngineObserver observer : observers) {
-			observer.removeElementCollection(collection);
-		}
-	}
-
-
+	
 
 	@Override
 	public void addedGameElement(GameElement c) {
-		notifyElementAdded(c);
+		for (GameEngineObserver observer : observers)
+			observer.newElement(c);
 		
 	}
 
 	@Override
 	public void removedGameElement(GameElement c) {
-		notifyElementRemoved(c);
+		for (GameEngineObserver observer : observers) {
+			observer.removeElement(c);
+		}
 	}
 
 }

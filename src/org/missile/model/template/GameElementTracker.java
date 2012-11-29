@@ -1,4 +1,4 @@
-package org.missile.model;
+package org.missile.model.template;
 
 import java.util.Iterator;
 import java.util.List;

@@ -1,8 +1,8 @@
 package org.missile.model.city;
 
-import org.missile.model.GameElement;
-import org.missile.model.business.missile.Missile;
-import org.missile.model.business.missile.MissileHitable;
+import org.missile.model.missile.Missile;
+import org.missile.model.missile.MissileHitable;
+import org.missile.model.template.GameElement;
 import org.missile.view.Drawable;
 
 /**

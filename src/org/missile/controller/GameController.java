@@ -1,7 +1,7 @@
 package org.missile.controller;
 
 import org.missile.model.GameEngine;
-import org.missile.model.business.base.NoBasesLeftException;
+import org.missile.model.base.NoBasesLeftException;
 import org.missile.view.Canvas;
 
 /**
@@ -23,7 +23,7 @@ public class GameController {
 	public GameController(GameEngine logic) {
 		this.logic = logic;
 		canvas = new Canvas(this, 500, 500);
-		this.logic.registerObserver(canvas);
+		this.logic.addObserver(canvas);
 	}
 
 	/**

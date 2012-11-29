@@ -1,4 +1,4 @@
-package org.missile.model;
+package org.missile.model.template;
 
 import org.missile.model.city.City;
 

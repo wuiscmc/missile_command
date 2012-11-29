@@ -11,11 +11,11 @@ import javax.swing.JFrame;
 
 import org.missile.controller.GameController;
 import org.missile.model.GameEngineObserver;
-import org.missile.model.business.base.Base;
-import org.missile.model.business.base.NoBasesLeftException;
-import org.missile.model.business.explosion.Explosion;
-import org.missile.model.business.missile.Missile;
+import org.missile.model.base.Base;
+import org.missile.model.base.NoBasesLeftException;
 import org.missile.model.city.City;
+import org.missile.model.explosion.Explosion;
+import org.missile.model.missile.Missile;
 
 /**
  * View layer of the application.
