@@ -10,9 +10,11 @@ public class MissileTracker {
 	private List<Missile> missiles;
 	private List<City> cities;
 	private List<MissileObserver> observers;
+	private ExplosionsTracker explosionTracker;
 	
 	public MissileTracker(List<City> cities){
 		this.cities = cities;
+		explosionTracker = new ExplosionsTracker(missiles);
 		missiles = new Vector<Missile>();
 		observers = new Vector<MissileObserver>();
 	}

@@ -104,16 +104,24 @@ public class Explosion implements Drawable {
 		
 		List<Drawable> explodedMissiles = new Vector<Drawable>();
 		for (Missile m : missiles) {
-			double a = getY() - m.getY();
-			double b = getX() - m.getX();
-			double r = getR();
 
-			if ((a * a + b * b) < (r * r)) {
+			if(wraps(m)) 
 				explodedMissiles.add(m);
-			}
+
 		}
 		return explodedMissiles;
 	}
 	
+	public boolean wraps(Missile m){
+		boolean contains = false;
+		double a = getY() - m.getY();
+		double b = getX() - m.getX();
+		double r = getR();
+
+		if ((a * a + b * b) < (r * r)) {
+			contains = true;
+		}
+		return contains;
+	}
 
 }

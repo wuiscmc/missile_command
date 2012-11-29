@@ -105,7 +105,7 @@ public class GameEngine implements ExplosionObserver {
 	 */
 	public void moveElements() {
 		moveMissiles();
-		explosionsTracker.moveExplosions();
+		//explosionsTracker.moveExplosions();
 	}
 
 
