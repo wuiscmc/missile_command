@@ -21,10 +21,9 @@ import org.missile.view.Drawable;
  * 
  */
 
-public class Logic {
+public class GameEngine implements ExplosionObserver {
 
 	private List<Missile> missiles;
-	private List<Explosion> explosions;
 	private List<City> cities;
 	private List<Base> bases;
 
@@ -35,7 +34,7 @@ public class Logic {
 	 * of the system.
 	 * 
 	 */
-	private List<LogicObserver> observers;
+	private List<GameEngineObserver> observers;
 
 	/**
 	 * Defines how improbable is to be attacked. The ease of the game depends
@@ -56,12 +55,16 @@ public class Logic {
 	 */
 	private static double ALLY_MISSILE_DEFAULT_SPEED = 5;
 
-	public Logic() {
+	private ExplosionsTracker explosionsTracker; 
+	
+	public GameEngine() {
 		missiles = new Vector<Missile>();
-		explosions = new Vector<Explosion>();
 		bases = new Vector<Base>();
 		cities = new Vector<City>();
-		observers = new Vector<LogicObserver>();
+		observers = new Vector<GameEngineObserver>();
+		
+		explosionsTracker = new ExplosionsTracker(missiles);
+		explosionsTracker.addObserver(this);
 	}
 
 	/**
@@ -75,7 +78,9 @@ public class Logic {
 	 * @param height
 	 */
 	public void setBase(int x, int y, int width, int height, int gunHeigth) {
-		addElement(new Base(x, y, width, height, gunHeigth), bases);
+		Base b = new Base(x, y, width, height, gunHeigth);
+		bases.add(b);
+		notifyElementAdded(b);
 	}
 
 	/**
@@ -89,7 +94,9 @@ public class Logic {
 	 * @param height
 	 */
 	public void setCity(int x, int y, int width, int height) {
-		addElement(new City(x, y, width, height), cities);
+		City c = new City(x, y, width, height);
+		cities.add(c);
+		notifyElementAdded(c);
 	}
 
 	/**
@@ -98,7 +105,7 @@ public class Logic {
 	 */
 	public void moveElements() {
 		moveMissiles();
-		moveExplosions();
+		explosionsTracker.moveExplosions();
 	}
 
 
@@ -125,7 +132,9 @@ public class Logic {
 	public void shootEnemyMissile(int x0, int y0, int x1, int y1,
 			double shootingFactor, double missileSpeed) {
 		if (Math.random() * 100 > shootingFactor) {
-			addElement(new Missile(x0, y0, x1, y1, missileSpeed), missiles);
+			Missile m = new Missile(x0, y0, x1, y1, missileSpeed);
+			missiles.add(m);
+			notifyElementAdded(m);
 		}
 	}
 
@@ -145,7 +154,9 @@ public class Logic {
 	 */
 	public void shootAllytMissile(int x, int y) {
 		Base b = getClosestBase(x, y);
-		addElement(new Missile(b.getX(), b.getY(), x, y, 5), missiles);
+		Missile m = new Missile(b.getX(), b.getY(), x, y, 5);
+		missiles.add(m);
+		notifyElementAdded(m);
 	}
 	
 	/**
@@ -172,7 +183,7 @@ public class Logic {
 	 * 
 	 * @param observer
 	 */
-	public void registerObserver(LogicObserver observer) {
+	public void registerObserver(GameEngineObserver observer) {
 		observers.add(observer);
 	}
 
@@ -181,7 +192,7 @@ public class Logic {
 	 * 
 	 * @param observer
 	 */
-	public void removeObserver(LogicObserver observer) {
+	public void removeObserver(GameEngineObserver observer) {
 		observers.remove(observer);
 	}
 
@@ -194,9 +205,8 @@ public class Logic {
 	 * @param list
 	 *            a generic List
 	 */
-	private void addElement(Drawable element, List list) {
-		list.add(element);
-		for (LogicObserver observer : observers)
+	private void notifyElementAdded(Drawable element) {
+		for (GameEngineObserver observer : observers)
 			observer.newElement(element);
 	}
 
@@ -210,9 +220,8 @@ public class Logic {
 	 * @param list
 	 *            a generic List
 	 */
-	private void removeElement(Drawable element, List list) {
-		list.remove(element);
-		for (LogicObserver observer : observers) {
+	private void notifyElementRemoved(Drawable element) {
+		for (GameEngineObserver observer : observers) {
 			observer.removeElement(element);
 		}
 	}
@@ -226,9 +235,8 @@ public class Logic {
 	 * @param list
 	 *            a generic List
 	 */
-	private void removeAllElement(List<Drawable> collection, List list) {
-		list.removeAll(collection);
-		for (LogicObserver observer : observers) {
+	private void notifyCollectionRemoved(List<Drawable> collection) {
+		for (GameEngineObserver observer : observers) {
 			observer.removeElementCollection(collection);
 		}
 	}
@@ -241,43 +249,25 @@ public class Logic {
 		for (int i = 0; i < missiles.size(); i++) {
 			Missile m = missiles.get(i);
 			if (m.done()) {
-				addElement(m.getExplosion(), explosions); // Whenever a
-															// missile reaches
-															// its goal, it
-															// explodes.
-				removeElement(m, missiles); // since it has exploded, we remove
-											// the missile from list of
-											// missiles.
+				
+				explosionsTracker.addExplosion(m.getExplosion());
+				missiles.remove(m);
+				
+				notifyElementRemoved(m);
+										
 			} else {
 				m.move();
 				List<Drawable> destroyedCities = m.collisions(cities);
-				removeAllElement(destroyedCities, cities); // we remove all the
+				cities.removeAll(destroyedCities);
+				
+				notifyCollectionRemoved(destroyedCities); // we remove all the
 															// destroyedCities
 															// from the system.
 			}
 		}
 	}
 
-	/**
-	 * Expands the explosions
-	 * 
-	 */
-	private void moveExplosions() {
-		for (int i = 0; i < explosions.size(); i++) {
-			Explosion e = explosions.get(i);
-			if (e.done()) {
-				removeElement(e, explosions);
-			} else {
-				e.move();
-				// we don't need to remove any missiles manually.
-				// they will just marked as "done" and in the next iteration
-				// will explode. This will lead to on cascade explosions.
-				e.collisions(missiles);
-			}
-		}
-	}
 
-	
 	/**
 	 * Given a point, it returns the closest base to it.
 	 * 
@@ -294,6 +284,16 @@ public class Logic {
 				b = base;
 		}
 		return b;
+	}
+
+	@Override
+	public void newExplosion(Explosion e) {
+		notifyElementAdded(e);
+	}
+
+	@Override
+	public void removedExplosion(Explosion e) {
+		notifyElementRemoved(e);
 	}
 
 }

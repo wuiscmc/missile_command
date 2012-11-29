@@ -9,11 +9,11 @@ import java.util.Vector;
 
 import javax.swing.JFrame;
 
-import org.missile.controller.Game;
+import org.missile.controller.GameController;
 import org.missile.model.Base;
 import org.missile.model.City;
 import org.missile.model.Explosion;
-import org.missile.model.LogicObserver;
+import org.missile.model.GameEngineObserver;
 import org.missile.model.Missile;
 
 /**
@@ -28,24 +28,24 @@ import org.missile.model.Missile;
  * 
  */
 
-public class Canvas extends JFrame implements Runnable, LogicObserver {
+public class Canvas extends JFrame implements Runnable, GameEngineObserver {
 
 	private Image img;
 	private Graphics dbg;
-	private Game controller;
+	private GameController controller;
 	private List<Drawable> screenElement;
 
 	/**
 	 * Constructor of the class
 	 * 
 	 * @param c
-	 *            reference to {@link Game}
+	 *            reference to {@link GameController}
 	 * @param width
 	 *            width of the canvas
 	 * @param height
 	 *            width of the canvas
 	 */
-	public Canvas(Game c, int width, int height) {
+	public Canvas(GameController c, int width, int height) {
 
 		controller = c;
 		setSize(width, height);

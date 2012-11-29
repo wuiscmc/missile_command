@@ -16,7 +16,7 @@ import org.missile.view.Drawable;
  * @author Luis Carlos Mateos
  * 
  */
-public interface LogicObserver {
+public interface GameEngineObserver {
 	/**
 	 * Notifies the observers about a new element has been added.
 	 * 

@@ -51,19 +51,6 @@ public class Base implements Drawable {
 	}
 
 	/**
-	 * Points the gun to (x, y) point.
-	 */
-	private void recalculate() {
-		double dy = iy - y;
-		double dx = ix - x;
-
-		angle = Math.atan2(dy, dx) + Math.PI;
-
-		x = Math.cos(angle) * gunLength + ix;
-		y = Math.sin(angle) * gunLength + iy;
-	}
-
-	/**
 	 * Sets the current (x, y) target point for the gun and recalculates its
 	 * angle of shoot.
 	 * 
@@ -75,9 +62,15 @@ public class Base implements Drawable {
 	public void aimGun(int x, int y) {
 		this.x = x;
 		this.y = y;
-		recalculate();
-	}
+		double dy = iy - this.y;
+		double dx = ix - this.x;
 
+		angle = Math.atan2(dy, dx) + Math.PI;
+
+		this.x = Math.cos(angle) * gunLength + ix;
+		this.y = Math.sin(angle) * gunLength + iy;
+	}
+	
 	/**
 	 * Calculates the distance between the base and a certain point.
 	 * 
@@ -92,31 +85,56 @@ public class Base implements Drawable {
 		int dy = (by + heigth / 2) - y;
 		return Math.sqrt(dx * dx + dy * dy);
 	}
-
+	
+	/**
+	 * 
+	 * @return integer. current x axis coordinate of the guns pointer
+	 */
 	public int getX() {
 		return (int) x;
 	}
 
+	/**
+	 * 
+	 * @return integer. current y axis coordinate of the guns pointer
+	 */
 	public int getY() {
 		return (int) y;
 	}
 
+	/**
+	 * 
+	 * @return integer. initial x axis coordinate of the guns pointer  
+	 */
 	public int getIx() {
 		return ix;
 	}
 
+	/**
+	 * 
+	 * @return integer. initial y axis coordinate of the guns pointer
+	 */
 	public int getIy() {
 		return iy;
 	}
 
+	/**
+	 * 
+	 * @return integer. bottom left point x axis coordinate of the base
+	 */
 	public int getBx() {
 		return bx;
 	}
-
+	
+	/**
+	 * 
+	 * @return integer. bottom left point y axis coordinate of the base
+	 */
 	public int getBy() {
 		return by;
 	}
 
+	
 	public int getHeigth() {
 		return heigth;
 	}

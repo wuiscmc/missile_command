@@ -101,6 +101,7 @@ public class Explosion implements Drawable {
 	 *            a List of {@link Missile}
 	 */
 	public List<Drawable> collisions(List<Missile> missiles) {
+		
 		List<Drawable> explodedMissiles = new Vector<Drawable>();
 		for (Missile m : missiles) {
 			double a = getY() - m.getY();
@@ -108,10 +109,11 @@ public class Explosion implements Drawable {
 			double r = getR();
 
 			if ((a * a + b * b) < (r * r)) {
-				m.setExploded(true);
+				explodedMissiles.add(m);
 			}
 		}
 		return explodedMissiles;
 	}
+	
 
 }

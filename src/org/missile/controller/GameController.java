@@ -1,6 +1,6 @@
 package org.missile.controller;
 
-import org.missile.model.Logic;
+import org.missile.model.GameEngine;
 import org.missile.view.Canvas;
 
 /**
@@ -14,12 +14,12 @@ import org.missile.view.Canvas;
  * @author Luis Carlos Mateos
  * 
  */
-public class Game {
+public class GameController {
 
-	private Logic logic;
+	private GameEngine logic;
 	private Canvas canvas;
 
-	public Game(Logic logic) {
+	public GameController(GameEngine logic) {
 		this.logic = logic;
 		canvas = new Canvas(this, 500, 500);
 		this.logic.registerObserver(canvas);

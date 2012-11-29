@@ -1,20 +1,20 @@
 package org.missile;
 
-import org.missile.controller.Game;
-import org.missile.model.Logic;
+import org.missile.controller.GameController;
+import org.missile.model.GameEngine;
 
 
 public class Main {
 	/**
 	 * Main function of the system
 	 * <p>
-	 * It initializes {@link Game} and passes a reference to a {@link Logic} instance. 
+	 * It initializes {@link GameController} and passes a reference to a {@link GameEngine} instance. 
 	 * @param args
-	 * @see Game
-	 * @see Logic
+	 * @see GameController
+	 * @see GameEngine
 	 */
 	public static void main(String[] args) {
-		Game c = new Game(new Logic());
+		GameController c = new GameController(new GameEngine());
 		c.startGame();
 	}
 
