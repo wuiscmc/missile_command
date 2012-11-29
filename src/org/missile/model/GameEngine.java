@@ -3,6 +3,13 @@ package org.missile.model;
 import java.util.List;
 import java.util.Vector;
 
+import org.missile.model.business.base.Base;
+import org.missile.model.business.base.BaseTracker;
+import org.missile.model.business.base.NoBasesLeftException;
+import org.missile.model.business.explosion.ExplosionsTracker;
+import org.missile.model.business.missile.Missile;
+import org.missile.model.business.missile.MissilesTracker;
+import org.missile.model.city.City;
 import org.missile.view.Drawable;
 
 /**
@@ -21,12 +28,14 @@ import org.missile.view.Drawable;
  * 
  */
 
-public class GameEngine implements ExplosionObserver {
+public class GameEngine implements GameElementObserver {
 
-	private List<Missile> missiles;
-	private List<City> cities;
-	private List<Base> bases;
-
+	
+	private GameElementTracker cities;
+	private BaseTracker bases;
+	private ExplosionsTracker explosions; 
+	private MissilesTracker missiles; 
+	
 	/**
 	 * List which contains the observers of the events which occur in the game.
 	 * These observers will be notified when an ally or enemy missile is
@@ -55,16 +64,22 @@ public class GameEngine implements ExplosionObserver {
 	 */
 	private static double ALLY_MISSILE_DEFAULT_SPEED = 5;
 
-	private ExplosionsTracker explosionsTracker; 
-	
+
 	public GameEngine() {
-		missiles = new Vector<Missile>();
-		bases = new Vector<Base>();
-		cities = new Vector<City>();
+		
 		observers = new Vector<GameEngineObserver>();
 		
-		explosionsTracker = new ExplosionsTracker(missiles);
-		explosionsTracker.addObserver(this);
+		cities = new GameElementTracker();
+		bases = new BaseTracker();
+		explosions = new ExplosionsTracker();
+		missiles = new MissilesTracker();
+		
+		bases.addObserver(this);
+		explosions.addObserver(this);
+		missiles.addObserver(this);
+		cities.addObserver(this);
+		
+		missiles.addObserver(explosions);	
 	}
 
 	/**
@@ -77,10 +92,8 @@ public class GameEngine implements ExplosionObserver {
 	 * @param width
 	 * @param height
 	 */
-	public void setBase(int x, int y, int width, int height, int gunHeigth) {
-		Base b = new Base(x, y, width, height, gunHeigth);
-		bases.add(b);
-		notifyElementAdded(b);
+	public void addBase(int x, int y, int width, int height, int gunHeigth) {
+		bases.add(new Base(x, y, width, height, gunHeigth));
 	}
 
 	/**
@@ -93,7 +106,7 @@ public class GameEngine implements ExplosionObserver {
 	 * @param width
 	 * @param height
 	 */
-	public void setCity(int x, int y, int width, int height) {
+	public void addCity(int x, int y, int width, int height) {
 		City c = new City(x, y, width, height);
 		cities.add(c);
 		notifyElementAdded(c);
@@ -104,8 +117,17 @@ public class GameEngine implements ExplosionObserver {
 	 * they have collided with another element. 
 	 */
 	public void moveElements() {
-		moveMissiles();
-		//explosionsTracker.moveExplosions();
+		missiles.check();
+		explosions.check();
+		
+		List citiesHit  = missiles.hits(cities.iterator());
+		cities.removeAll(citiesHit);
+		
+		List explosionsHit = missiles.hits(explosions.iterator());
+		explosions.removeAll(explosionsHit);
+		
+		List basesHit  = missiles.hits(bases.iterator());
+		bases.removeAll(basesHit);
 	}
 
 
@@ -132,9 +154,7 @@ public class GameEngine implements ExplosionObserver {
 	public void shootEnemyMissile(int x0, int y0, int x1, int y1,
 			double shootingFactor, double missileSpeed) {
 		if (Math.random() * 100 > shootingFactor) {
-			Missile m = new Missile(x0, y0, x1, y1, missileSpeed);
-			missiles.add(m);
-			notifyElementAdded(m);
+			missiles.add(new Missile(x0, y0, x1, y1, missileSpeed));
 		}
 	}
 
@@ -151,12 +171,10 @@ public class GameEngine implements ExplosionObserver {
 	 *            x axis coordinate of the shooting point
 	 * @param y
 	 *            y axis coordinate of the shooting point
+	 * @throws NoBasesLeftException 
 	 */
-	public void shootAllytMissile(int x, int y) {
-		Base b = getClosestBase(x, y);
-		Missile m = new Missile(b.getX(), b.getY(), x, y, 5);
-		missiles.add(m);
-		notifyElementAdded(m);
+	public void shootAllytMissile(int x, int y) throws NoBasesLeftException {
+		missiles.add(bases.shootFromClosestBase(x,y));
 	}
 	
 	/**
@@ -167,9 +185,10 @@ public class GameEngine implements ExplosionObserver {
 	 *            destination x axis coordinate
 	 * @param y
 	 *            destination y axis coordinate
+	 * @throws NoBasesLeftException 
 	 */
-	public void aimGun(int x, int y) {
-		getClosestBase(x, y).aimGun(x, y);
+	public void aimGun(int x, int y) throws NoBasesLeftException {
+		bases.aimGun(x, y);
 	}
 	
 	
@@ -240,60 +259,18 @@ public class GameEngine implements ExplosionObserver {
 			observer.removeElementCollection(collection);
 		}
 	}
-	
-	/**
-	 * Guides the missiles and checks whether they have hit their target.
-	 * 
-	 */
-	private void moveMissiles() {
-		for (int i = 0; i < missiles.size(); i++) {
-			Missile m = missiles.get(i);
-			if (m.done()) {
-				
-				explosionsTracker.addExplosion(m.getExplosion());
-				missiles.remove(m);
-				
-				notifyElementRemoved(m);
-										
-			} else {
-				m.move();
-				List<Drawable> destroyedCities = m.collisions(cities);
-				cities.removeAll(destroyedCities);
-				
-				notifyCollectionRemoved(destroyedCities); // we remove all the
-															// destroyedCities
-															// from the system.
-			}
-		}
-	}
 
 
-	/**
-	 * Given a point, it returns the closest base to it.
-	 * 
-	 * @param x
-	 *            x axis coordinate
-	 * @param y
-	 *            y axis coordinate
-	 * @return the closest base to that point
-	 */
-	private Base getClosestBase(int x, int y) {
-		Base b = null;
-		for (Base base : bases) {
-			if (b == null || b.distanceBase(x, y) > base.distanceBase(x, y))
-				b = base;
-		}
-		return b;
+
+	@Override
+	public void addedGameElement(GameElement c) {
+		notifyElementAdded(c);
+		
 	}
 
 	@Override
-	public void newExplosion(Explosion e) {
-		notifyElementAdded(e);
-	}
-
-	@Override
-	public void removedExplosion(Explosion e) {
-		notifyElementRemoved(e);
+	public void removedGameElement(GameElement c) {
+		notifyElementRemoved(c);
 	}
 
 }

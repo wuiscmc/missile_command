@@ -1,6 +1,7 @@
 package org.missile.controller;
 
 import org.missile.model.GameEngine;
+import org.missile.model.business.base.NoBasesLeftException;
 import org.missile.view.Canvas;
 
 /**
@@ -50,7 +51,7 @@ public class GameController {
 	 *            the height for the base's gun
 	 */
 	public void addBase(int x, int y, int width, int height, int gunHeigth) {
-		logic.setBase(x, y, width, height, gunHeigth);
+		logic.addBase(x, y, width, height, gunHeigth);
 	}
 
 	/**
@@ -68,7 +69,7 @@ public class GameController {
 	 * 
 	 */
 	public void addCity(int x, int y, int width, int height) {
-		logic.setCity(x, y, width, height);
+		logic.addCity(x, y, width, height);
 	}
 
 	/**
@@ -101,12 +102,13 @@ public class GameController {
 	 *            x axis coordinate targets point
 	 * @param y
 	 *            y axis coordinate targets point
+	 * @throws NoBasesLeftException 
 	 */
-	public void shootMissile(int x, int y) {
+	public void shootMissile(int x, int y) throws NoBasesLeftException {
 		logic.shootAllytMissile(x, y);
 	}
 
-	public void aimGun(int x, int y) {
+	public void aimGun(int x, int y) throws NoBasesLeftException {
 		logic.aimGun(x, y);
 	}
 

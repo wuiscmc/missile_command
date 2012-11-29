@@ -10,11 +10,12 @@ import java.util.Vector;
 import javax.swing.JFrame;
 
 import org.missile.controller.GameController;
-import org.missile.model.Base;
-import org.missile.model.City;
-import org.missile.model.Explosion;
 import org.missile.model.GameEngineObserver;
-import org.missile.model.Missile;
+import org.missile.model.business.base.Base;
+import org.missile.model.business.base.NoBasesLeftException;
+import org.missile.model.business.explosion.Explosion;
+import org.missile.model.business.missile.Missile;
+import org.missile.model.city.City;
 
 /**
  * View layer of the application.
@@ -34,7 +35,7 @@ public class Canvas extends JFrame implements Runnable, GameEngineObserver {
 	private Graphics dbg;
 	private GameController controller;
 	private List<Drawable> screenElement;
-
+	private boolean end; 
 	/**
 	 * Constructor of the class
 	 * 
@@ -46,7 +47,7 @@ public class Canvas extends JFrame implements Runnable, GameEngineObserver {
 	 *            width of the canvas
 	 */
 	public Canvas(GameController c, int width, int height) {
-
+		end = false;
 		controller = c;
 		setSize(width, height);
 		setTitle("Missile command");
@@ -59,8 +60,13 @@ public class Canvas extends JFrame implements Runnable, GameEngineObserver {
 		 * keyboard would not be a problem
 		 */
 		addMouseListener(new MouseAdapter() {
-			public void mousePressed(MouseEvent e) {
-				controller.shootMissile(e.getX(), e.getY());
+			public void mousePressed(MouseEvent event) {
+				try{
+					controller.shootMissile(event.getX(), event.getY());
+				}
+				catch(NoBasesLeftException exception){
+					end = true;
+				}
 			};
 		});
 
@@ -72,7 +78,12 @@ public class Canvas extends JFrame implements Runnable, GameEngineObserver {
 		addMouseMotionListener(new MouseAdapter() {
 			@Override
 			public void mouseMoved(MouseEvent e) {
-				controller.aimGun(e.getX(), e.getY());
+				try{
+					controller.aimGun(e.getX(), e.getY());
+				}
+				catch(NoBasesLeftException exception){
+					end = true;
+				}
 			}
 		});
 
@@ -83,16 +94,14 @@ public class Canvas extends JFrame implements Runnable, GameEngineObserver {
 	 * 
 	 */
 	public void run() {
-		int baseHeight = 50, baseWidth = 50, gunHeight = 20;
 
-		controller.addBase(150, getHeight() - baseHeight, baseWidth,
-				baseHeight, gunHeight);
-		controller.addBase(275, getHeight() - baseHeight, baseWidth,
-				baseHeight, gunHeight);
-		controller.addBase(400, getHeight() - baseHeight, baseWidth,
-				baseHeight, gunHeight);
+		controller.addBase(150, 400, 10, 100, 10);
+		controller.addBase(275, 400, 10, 100, 10);
+		controller.addBase(400, 400, 10, 100, 10);
 
-		while (true) {
+		controller.addCity(50, 450, 50, 50);
+
+		while (!end) {
 			int ix = (int) ((Math.random() * 1000) % getWidth() - 20 + 20);
 			int dx = (int) ((Math.random() * 1000) % getWidth() - 20 + 20);
 			controller.shootEnemyMissile(ix, 0, dx, 500);
@@ -103,6 +112,9 @@ public class Canvas extends JFrame implements Runnable, GameEngineObserver {
 				e.printStackTrace();
 			}
 		}
+		
+		
+		
 	}
 
 	/**
@@ -133,10 +145,13 @@ public class Canvas extends JFrame implements Runnable, GameEngineObserver {
 	 *            elements
 	 */
 	public void paintComponent(Graphics g) {
-		if (screenElement != null) {
+		if (screenElement != null && !end) {
 			for (int i = 0; i < screenElement.size(); i++) {
 				drawElement(g, screenElement.get(i));
 			}
+		}
+		else{
+			dbg.drawString("Game over", getWidth()/2 - 20 , getHeight()/2 );
 		}
 		repaint();
 	}
@@ -145,7 +160,8 @@ public class Canvas extends JFrame implements Runnable, GameEngineObserver {
 	 * It renders the {@link Drawable} object in the Canvas.
 	 * 
 	 * @param g
-	 *            {@link Graphics} instance that renders the {@link Drawable} object
+	 *            {@link Graphics} instance that renders the {@link Drawable}
+	 *            object
 	 * @param d
 	 *            {@link Drawable} object to be rendered.
 	 */

@@ -1,5 +1,8 @@
-package org.missile.model;
+package org.missile.model.business.base;
 
+import org.missile.model.GameElement;
+import org.missile.model.business.missile.Missile;
+import org.missile.model.business.missile.MissileHitable;
 import org.missile.view.Drawable;
 
 /**
@@ -11,12 +14,12 @@ import org.missile.view.Drawable;
  * @author Luis Carlos Mateos
  * @see Drawable
  */
-public class Base implements Drawable {
+public class Base extends GameElement implements MissileHitable {
 
 	private double x, y;
 	private int ix, iy;
 	private double angle;
-	private int bx, by, heigth, width, gunLength;
+	private int bx, by, height, width, gunLength;
 
 	/**
 	 * Constructor of the class.
@@ -28,18 +31,18 @@ public class Base implements Drawable {
 	 *            integer. base's bottom left x axis coordinate.
 	 * @param by
 	 *            integer. base's bottom left y axis coordinate.
-	 * @param heigth
+	 * @param height
 	 *            integer. height of the base
 	 * @param width
 	 *            integer. width of the base
 	 * @param gunLength
 	 *            integer. integer guns length
 	 */
-	public Base(int bx, int by, int heigth, int width, int gunLength) {
+	public Base(int bx, int by, int width, int height, int gunLength) {
 
 		this.bx = bx;
 		this.by = by;
-		this.heigth = heigth;
+		this.height = height;
 		this.width = width;
 		this.gunLength = gunLength;
 
@@ -82,7 +85,7 @@ public class Base implements Drawable {
 	 */
 	public double distanceBase(int x, int y) {
 		int dx = (bx + width / 2) - x;
-		int dy = (by + heigth / 2) - y;
+		int dy = (by + height / 2) - y;
 		return Math.sqrt(dx * dx + dy * dy);
 	}
 	
@@ -136,11 +139,21 @@ public class Base implements Drawable {
 
 	
 	public int getHeigth() {
-		return heigth;
+		return height;
 	}
 
 	public int getWidth() {
 		return width;
 	}
 
+	@Override
+	public boolean reached(Missile m) {
+		return containsPoint(m.getX(), m.getY());
+	}
+
+	public boolean containsPoint(int x, int y) {
+		int x2 = bx + width;
+		int y2 = by + height;
+		return (x < x2 && x > bx) && (y < y2 && y > by);
+	}
 }

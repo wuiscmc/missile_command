@@ -1,8 +1,10 @@
-package org.missile.model;
+package org.missile.model.business.missile;
 
 import java.util.List;
 import java.util.Vector;
 
+import org.missile.model.GameElement;
+import org.missile.model.business.explosion.Explosion;
 import org.missile.view.Drawable;
 
 /**
@@ -14,7 +16,7 @@ import org.missile.view.Drawable;
  * @author Luis Carlos Mateos
  * @see Drawable
  */
-public class Missile implements Drawable {
+public class Missile extends GameElement{
 
 	private int ix, iy, gx, gy;
 	private double cx, cy;
@@ -61,8 +63,8 @@ public class Missile implements Drawable {
 		dy = Math.abs(gy - iy);
 
 		double distance = Math.sqrt(dx * dx + dy * dy);
-		dx = (dx / distance) * speed;
-		dy = (dy / distance) * speed;
+		dx = (dx / distance) * this.speed;
+		dy = (dy / distance) * this.speed;
 	}
 
 	public Missile(int ix, int iy, int gx, int gy) {
@@ -78,12 +80,20 @@ public class Missile implements Drawable {
 	 * It is important to note that this model assumes that the Canvas top-left
 	 * coordinate is (0,Y_MAX) and its bottom-right coordinate is (X_MAX,0)
 	 */
-	public void move() {
+	public boolean move() {
+		boolean canMove = true;
+		
 		cx = cx + dx;
 		if (iy <= gy)
 			cy = cy + dy; // means its fired from the top of the window
 		else
 			cy = cy - dy; // its fired from the bottom
+		
+		if(done()){
+			canMove = false;
+		}
+		
+		return canMove;
 	}
 
 	/**
@@ -92,7 +102,7 @@ public class Missile implements Drawable {
 	 * 
 	 * @return true if the missile has reached its target or has exploded
 	 */
-	public boolean done() {
+	private boolean done() {
 		boolean done = false;
 		if (ix >= gx) {
 			done = cx <= gx;
@@ -110,16 +120,15 @@ public class Missile implements Drawable {
 		return (done && doney) || explode;
 	}
 
-	/**
-	 * Setter of explode variable
-	 * 
-	 * @param explode
-	 *            boolean
-	 */
-	public void setExploded(boolean explode) {
-		this.explode = explode;
-	}
 
+	public int getIX(){
+		return ix;
+	}
+	
+	public int getIY(){
+		return iy;
+	}
+	
 	/**
 	 * Getter for cx
 	 * 
@@ -138,32 +147,7 @@ public class Missile implements Drawable {
 		return (int) cy;
 	}
 
-	/**
-	 * Getter for ix
-	 * 
-	 * @return integer. the origin x coordinate
-	 */
-	public int getIX() {
-		return ix;
-	}
 
-	/**
-	 * Getter for iy
-	 * 
-	 * @return integer. the origin y coordinate
-	 */
-	public int getIY() {
-		return iy;
-	}
-	
-	/**
-	 * Getter for dx
-	 * @return double. delta x axis coordinate of the missile.
-	 */
-	public double getDX(){
-		return dx;
-	}
-	
 	/**
 	 * Getter for dx
 	 * @return double. delta y axis coordinate of the missile.
@@ -171,27 +155,7 @@ public class Missile implements Drawable {
 	public double getDY(){
 		return dy;
 	}
-	
-	/**
-	 * Checks if there are any cities which have been reached by the missile. In
-	 * case there are any, they'll be destroyed and the missile will explode.
-	 * 
-	 * @param cities
-	 *            a List of {@link City} containing the remaining cities in the
-	 *            system
-	 * @return a {@link List} of {@link Drawable} impacted by the missile
-	 */
-	public List<Drawable> collisions(List<City> cities) {
-		List<Drawable> citiesExploded = new Vector<Drawable>();
-		for (City c : cities) {
-			if (c.containsPoint(getX(), getY())) {
-				setExploded(true);
-				c.setDestroyed(true);
-				citiesExploded.add(c);
-			}
-		}
-		return citiesExploded;
-	}
+
 
 	/**
 	 * @return a {@link Explosion}�that occurs at the point of the missile.
@@ -200,4 +164,11 @@ public class Missile implements Drawable {
 		return new Explosion(getX(), getY());
 	}
 
+	public boolean hits(MissileHitable c) {
+		boolean hits = c.reached(this);
+		if(hits) explode = true;
+		return hits;
+	}
+
+	
 };

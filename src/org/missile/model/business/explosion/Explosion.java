@@ -1,8 +1,8 @@
-package org.missile.model;
+package org.missile.model.business.explosion;
 
-import java.util.List;
-import java.util.Vector;
-
+import org.missile.model.GameElement;
+import org.missile.model.business.missile.Missile;
+import org.missile.model.business.missile.MissileHitable;
 import org.missile.view.Drawable;
 
 /**
@@ -14,7 +14,7 @@ import org.missile.view.Drawable;
  * @author Luis Carlos Mateos
  * @see Drawable
  */
-public class Explosion implements Drawable {
+public class Explosion extends GameElement implements MissileHitable {
 	private int x, y, r;
 
 	/**
@@ -52,8 +52,11 @@ public class Explosion implements Drawable {
 	/**
 	 * Increases the radius of the explosion and therefore, it gets bigger.
 	 */
-	public void move() {
-		r += EXPANSION_SPEED;
+	public boolean move() {
+		boolean canMove = !done();
+		if(canMove) 
+			r += EXPANSION_SPEED;
+		return canMove;
 	}
 
 	/**
@@ -62,7 +65,7 @@ public class Explosion implements Drawable {
 	 * @return true if the radius is higher than the MAXIMUM_EXPLOSION_RADIUS.
 	 * @return false if the explosion can still grow.
 	 */
-	public boolean done() {
+	private boolean done() {
 		return r >= MAXIMUM_EXPLOSION_RADIUS;
 	}
 
@@ -93,26 +96,9 @@ public class Explosion implements Drawable {
 		return r;
 	}
 
-	/**
-	 * Checks if there are any missiles within the area of the explosion. In
-	 * that case they would explode as well.
-	 * 
-	 * @param missiles
-	 *            a List of {@link Missile}
-	 */
-	public List<Drawable> collisions(List<Missile> missiles) {
-		
-		List<Drawable> explodedMissiles = new Vector<Drawable>();
-		for (Missile m : missiles) {
 
-			if(wraps(m)) 
-				explodedMissiles.add(m);
-
-		}
-		return explodedMissiles;
-	}
 	
-	public boolean wraps(Missile m){
+	public boolean reached(Missile m){
 		boolean contains = false;
 		double a = getY() - m.getY();
 		double b = getX() - m.getX();

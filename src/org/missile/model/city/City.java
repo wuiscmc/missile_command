@@ -1,5 +1,8 @@
-package org.missile.model;
+package org.missile.model.city;
 
+import org.missile.model.GameElement;
+import org.missile.model.business.missile.Missile;
+import org.missile.model.business.missile.MissileHitable;
 import org.missile.view.Drawable;
 
 /**
@@ -11,8 +14,7 @@ import org.missile.view.Drawable;
  * @see Drawable
  */
 
-public class City implements Drawable {
-	private boolean destroyed;
+public class City extends GameElement implements MissileHitable {
 	int x1, y1, width, height;
 
 	/**
@@ -32,7 +34,6 @@ public class City implements Drawable {
 		y1 = y;
 		this.width = width;
 		this.height = height;
-		destroyed = false;
 	}
 
 	/**
@@ -86,22 +87,10 @@ public class City implements Drawable {
 		return height;
 	}
 
-	/**
-	 * Setter of destroyed
-	 * 
-	 * @param destroyed
-	 *            boolean containing the new destroyed value.
-	 */
-	public void setDestroyed(boolean destroyed) {
-		this.destroyed = destroyed;
-	}
 
-	/**
-	 * Getter of destroyed
-	 * 
-	 * @return boolean destroyed. whether the city has been destroyed or not.
-	 */
-	public boolean getDestroyed() {
-		return destroyed;
+
+	@Override
+	public boolean reached(Missile m) {
+		return containsPoint(m.getX(), m.getY());
 	}
 }
