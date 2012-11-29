@@ -8,11 +8,14 @@ import org.missile.view.Drawable;
 /**
  * Represents a base in the system.
  * <p>
- * A base is represented by the container and a gun, which is a line that stands
- * in the middle of the the base container and has a certain length.
+ * A base is a type of {@link GameElement} represented by the container and a
+ * gun, which is a line that stands in the middle of the the base container and
+ * has a certain length. Since the bases can be destroyed by a missile it is
+ * required to implement {@link MissileHitable} 
  * 
  * @author Luis Carlos Mateos
- * @see Drawable
+ * @see GameElement
+ * @see MissileHitable
  */
 public class Base extends GameElement implements MissileHitable {
 
@@ -73,7 +76,7 @@ public class Base extends GameElement implements MissileHitable {
 		this.x = Math.cos(angle) * gunLength + ix;
 		this.y = Math.sin(angle) * gunLength + iy;
 	}
-	
+
 	/**
 	 * Calculates the distance between the base and a certain point.
 	 * 
@@ -88,7 +91,7 @@ public class Base extends GameElement implements MissileHitable {
 		int dy = (by + height / 2) - y;
 		return Math.sqrt(dx * dx + dy * dy);
 	}
-	
+
 	/**
 	 * 
 	 * @return integer. current x axis coordinate of the guns pointer
@@ -107,7 +110,7 @@ public class Base extends GameElement implements MissileHitable {
 
 	/**
 	 * 
-	 * @return integer. initial x axis coordinate of the guns pointer  
+	 * @return integer. initial x axis coordinate of the guns pointer
 	 */
 	public int getIx() {
 		return ix;
@@ -128,7 +131,7 @@ public class Base extends GameElement implements MissileHitable {
 	public int getBx() {
 		return bx;
 	}
-	
+
 	/**
 	 * 
 	 * @return integer. bottom left point y axis coordinate of the base
@@ -137,7 +140,6 @@ public class Base extends GameElement implements MissileHitable {
 		return by;
 	}
 
-	
 	public int getHeigth() {
 		return height;
 	}

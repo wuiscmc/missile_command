@@ -14,9 +14,9 @@ import org.missile.view.Drawable;
  * it expands until it reaches a goal point or explodes.
  * 
  * @author Luis Carlos Mateos
- * @see Drawable
+ * @see GameElement
  */
-public class Missile extends GameElement{
+public class Missile extends GameElement {
 
 	private int ix, iy, gx, gy;
 	private double cx, cy;
@@ -36,7 +36,7 @@ public class Missile extends GameElement{
 	 * template needed by the guidance missile guidance system. The movement of
 	 * the missile follows the <a
 	 * href="http://en.wikipedia.org/wiki/Pythagorean_theorem"> Pythagorean
-	 * Theorem</a>. 
+	 * Theorem</a>.
 	 * 
 	 * @param ix
 	 *            origin x coordinate
@@ -72,27 +72,30 @@ public class Missile extends GameElement{
 	}
 
 	/**
-	 * Moves the missile towards its target.
+	 * Calculates the movement of a missile and checks whether it has reached
+	 * its destination
 	 * <p>
 	 * Since we have calculated the delta coordinates, we only need to add the
 	 * delta value to the current point to know where exactly is the next point.
 	 * <p>
 	 * It is important to note that this model assumes that the Canvas top-left
 	 * coordinate is (0,Y_MAX) and its bottom-right coordinate is (X_MAX,0)
+	 * 
+	 * @return true if the missile could advance to a further point.
 	 */
 	public boolean move() {
 		boolean canMove = true;
-		
+
 		cx = cx + dx;
 		if (iy <= gy)
 			cy = cy + dy; // means its fired from the top of the window
 		else
 			cy = cy - dy; // its fired from the bottom
-		
-		if(done()){
+
+		if (done()) {
 			canMove = false;
 		}
-		
+
 		return canMove;
 	}
 
@@ -120,55 +123,73 @@ public class Missile extends GameElement{
 		return (done && doney) || explode;
 	}
 
-
-	public int getIX(){
+	/**
+	 * Getter for the ix coordinate (x axis origin of the missile)
+	 * 
+	 * @return integer. the coordinate ix
+	 */
+	public int getIX() {
 		return ix;
 	}
-	
-	public int getIY(){
+
+	/**
+	 * Getter for the iy coordinate (y axis origin of the missile)
+	 * 
+	 * @return integer. the coordinate iy
+	 */
+	public int getIY() {
 		return iy;
 	}
-	
+
 	/**
-	 * Getter for cx
+	 * Getter for cx coordinate (x axis current point of the missile)
 	 * 
-	 * @return integer. current y coordinate
+	 * @return integer. the coordinate cx
 	 */
 	public int getX() {
 		return (int) cx;
 	}
 
 	/**
-	 * Getter for cy
+	 * Getter for cy coordinate (cy axis current point of the missile)
 	 * 
-	 * @return integer. the current y coordinate
+	 * @return integer. the coordinate cy
 	 */
 	public int getY() {
 		return (int) cy;
 	}
 
-
 	/**
-	 * Getter for dx
+	 * Getter for dx parameter.
+	 * 
 	 * @return double. delta y axis coordinate of the missile.
 	 */
-	public double getDY(){
+	public double getDY() {
 		return dy;
 	}
 
-
 	/**
-	 * @return a {@link Explosion}�that occurs at the point of the missile.
+	 * @return a {@link Explosion} that occurs at the point of the missile.
 	 */
 	public Explosion getExplosion() {
-		return new Explosion(getX(), getY());
+		return new Explosion((int) cx, (int) cy);
 	}
 
+	/**
+	 * Calculates whether a missile has reached an element and therefore has
+	 * exploded.
+	 * 
+	 * @param c
+	 *            {@link MissileHitable} object to be checked
+	 * @return true if the missile has reached a certain object and marks itself
+	 *         as exploded.
+	 */
 	public boolean hits(MissileHitable c) {
-		boolean hits = c.reached(this);
-		if(hits) explode = true;
-		return hits;
+		boolean hit = c.reached(this);
+		if (hit)
+			explode = true;
+
+		return hit;
 	}
 
-	
 };

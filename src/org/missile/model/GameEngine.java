@@ -13,7 +13,6 @@ import org.missile.model.missile.MissilesTracker;
 import org.missile.model.template.GameElement;
 import org.missile.model.template.GameElementObserver;
 import org.missile.model.template.GameElementTracker;
-import org.missile.view.Drawable;
 
 /**
  * <p>
@@ -32,7 +31,7 @@ import org.missile.view.Drawable;
  */
 
 public class GameEngine implements GameElementObserver {
-
+	
 	
 	private GameElementTracker cities;
 	private BaseTracker bases;
@@ -79,9 +78,8 @@ public class GameEngine implements GameElementObserver {
 		
 		bases.addObserver(this);
 		explosions.addObserver(this);
-		missiles.addObserver(this);
 		cities.addObserver(this);
-		
+		missiles.addObserver(this);
 		missiles.addObserver(explosions);	
 	}
 
@@ -114,10 +112,9 @@ public class GameEngine implements GameElementObserver {
 	}
 
 	/**
-	 * Checks whether the elements of the system have reached their goal and/or
-	 * they have collided with another element. 
+	 * Checks the status of the game: explosions, missiles hits, etc. 
 	 */
-	public void moveElements() {
+	public void checkGameStatus() {
 		missiles.check();
 		explosions.check();
 		
@@ -159,6 +156,13 @@ public class GameEngine implements GameElementObserver {
 		}
 	}
 
+	/**
+	 * Shoots an enemy missile with the default parameters
+	 * @param x0
+	 * @param y0
+	 * @param x1
+	 * @param y1
+	 */
 	public void shootEnemyMissile(int x0, int y0, int x1, int y1) {
 		shootEnemyMissile(x0, y0, x1, y1, ENEMY_SHOOTING_FACTOR,
 				ENEMY_MISSILE_DEFAULT_SPEED);

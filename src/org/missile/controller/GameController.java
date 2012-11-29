@@ -76,7 +76,7 @@ public class GameController {
 	 * Checks for any collisions and moves the elements
 	 */
 	public void moveElements() {
-		logic.moveElements();
+		logic.checkGameStatus();
 	}
 
 	/**

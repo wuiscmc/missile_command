@@ -106,9 +106,9 @@ public class Canvas extends JFrame implements Runnable, GameEngineObserver {
 		
 
 		while (!end) {
-			int ix = (int) ((Math.random() * 1000) % getWidth() - 20 + 20);
-			int dx = (int) ((Math.random() * 1000) % getWidth() - 20 + 20);
-			controller.shootEnemyMissile(ix, 0, dx, 500);
+			int ix = (int) (Math.random() * getWidth());
+			int dx = (int) (Math.random() * getWidth());
+			controller.shootEnemyMissile(ix, 0, dx, getHeight());
 			controller.moveElements();
 			try {
 				Thread.sleep(15);
@@ -116,8 +116,6 @@ public class Canvas extends JFrame implements Runnable, GameEngineObserver {
 				e.printStackTrace();
 			}
 		}
-		
-		
 		
 	}
 

@@ -8,10 +8,12 @@ import org.missile.view.Drawable;
 /**
  * Represents a city in the system.
  * <p>
- * A city is represented by a rectangle. They might be destroyed by missiles.
+ * A City is a type of {@link GameElement} represented by a rectangle. Since the cities can be destroyed by a
+ * missile, it is required to implement the {@link MissileHitable} interface.
  * 
  * @author Luis Carlos Mateos
- * @see Drawable
+ * @see GameElement
+ * @see MissileHitable
  */
 
 public class City extends GameElement implements MissileHitable {
@@ -37,7 +39,7 @@ public class City extends GameElement implements MissileHitable {
 	}
 
 	/**
-	 * Helper method that informs whether a point is inside the city
+	 * Helper method that returns if a point is inside the city
 	 * 
 	 * @param x
 	 *            x coordinate of the point
@@ -45,7 +47,7 @@ public class City extends GameElement implements MissileHitable {
 	 *            y coordinate of the point
 	 * @return true if the point is within the city
 	 */
-	public boolean containsPoint(int x, int y) {
+	private boolean containsPoint(int x, int y) {
 		int x2 = x1 + width;
 		int y2 = y1 + height;
 		return (x < x2 && x > x1) && (y < y2 && y > y1);
@@ -86,8 +88,6 @@ public class City extends GameElement implements MissileHitable {
 	public int getHeight() {
 		return height;
 	}
-
-
 
 	@Override
 	public boolean reached(Missile m) {

@@ -3,16 +3,18 @@ package org.missile.model.explosion;
 import org.missile.model.missile.Missile;
 import org.missile.model.missile.MissileHitable;
 import org.missile.model.template.GameElement;
-import org.missile.view.Drawable;
 
 /**
  * Logic representation for a explosion.
  * <p>
  * A explosion is represented by a circle which expands itself until it reaches
- * a certain limit, when it disappears.
+ * a certain limit, when it disappears. A explosion may be "hit" by a Missile,
+ * therefore we implement the {@link MissileHitable}, then we can nest as many
+ * explosions as we need.
  * 
  * @author Luis Carlos Mateos
- * @see Drawable
+ * @see GameElement
+ * @see MissileHitable
  */
 public class Explosion extends GameElement implements MissileHitable {
 	private int x, y, r;
@@ -50,23 +52,15 @@ public class Explosion extends GameElement implements MissileHitable {
 	}
 
 	/**
-	 * Increases the radius of the explosion and therefore, it gets bigger.
+	 * Expands the explosion if it hasnt reached its limit.
+	 * 
+	 * @return true if the explosion could be expanded
 	 */
 	public boolean move() {
-		boolean canMove = !done();
-		if(canMove) 
+		boolean canMove = r < MAXIMUM_EXPLOSION_RADIUS;
+		if (canMove)
 			r += EXPANSION_SPEED;
 		return canMove;
-	}
-
-	/**
-	 * Defines if the explosion is done.
-	 * 
-	 * @return true if the radius is higher than the MAXIMUM_EXPLOSION_RADIUS.
-	 * @return false if the explosion can still grow.
-	 */
-	private boolean done() {
-		return r >= MAXIMUM_EXPLOSION_RADIUS;
 	}
 
 	/**
@@ -96,17 +90,14 @@ public class Explosion extends GameElement implements MissileHitable {
 		return r;
 	}
 
-
-	
-	public boolean reached(Missile m){
+	@Override
+	public boolean reached(Missile m) {
 		boolean contains = false;
-		double a = getY() - m.getY();
-		double b = getX() - m.getX();
-		double r = getR();
+		double a = y - m.getY();
+		double b = x - m.getX();
 
-		if ((a * a + b * b) < (r * r)) {
+		if ((a * a + b * b) < ((r * r) / 2))
 			contains = true;
-		}
 		return contains;
 	}
 
