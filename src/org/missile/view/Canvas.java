@@ -170,8 +170,8 @@ public class Canvas extends JFrame implements Runnable, GameEngineObserver {
 	public void drawElement(Graphics g, Drawable d) {
 		if (d instanceof Base) {
 			Base b = (Base) d;
-			g.drawLine(b.getIx(), b.getIy(), b.getX(), b.getY());
-			g.drawRect(b.getBx(), b.getBy(), b.getWidth(), b.getHeigth());
+			g.drawLine(b.getGunIX(), b.getGunIY(), b.getGunCX(), b.getGunCY());
+			g.drawRect(b.getBX(), b.getBY(), b.getWidth(), b.getHeight());
 		}
 
 		if (d instanceof Explosion) {

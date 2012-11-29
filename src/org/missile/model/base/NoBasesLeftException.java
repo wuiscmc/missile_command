@@ -1,14 +1,19 @@
 package org.missile.model.base;
 
+/**
+ * Defines the NoBasesLeftException.
+ * <p>
+ * This exception is meant to be thrown when the number of bases is 0
+ * 
+ * @author Luis Carlos Mateos
+ * 
+ */
 public class NoBasesLeftException extends Exception {
-	
-    private String strValue;
 
-	public NoBasesLeftException() {
-		strValue = "There are no bases left. Game over";
-	}
-
+	/**
+	 * It prints a message stating that there are no bases.
+	 */
 	public String toString() {
-	   return "Exception: " + strValue;
-    }
+		return "Exception: There are no bases left. Game over";
+	}
 }

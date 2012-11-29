@@ -4,13 +4,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
+import org.missile.model.base.Base;
 import org.missile.model.template.GameElementTracker;
 
 /**
- * Missile collection handler
+ * {@link Missile} collection handler
  * <p>
- * This class controls a Missile collection. It knows when to move a missile and
- * how to calculate the hits with another game elements.
+ * This class is a type of {@link GameElementTracker} which controls a
+ * {@link Missile} collection. It knows when to move a missile and how to
+ * calculate the hits with another game elements.
  * 
  * @author luizcarlos
  * @see Missile

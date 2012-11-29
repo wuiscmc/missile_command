@@ -102,12 +102,22 @@ public class GameController {
 	 *            x axis coordinate targets point
 	 * @param y
 	 *            y axis coordinate targets point
-	 * @throws NoBasesLeftException 
+	 * @throws NoBasesLeftException
 	 */
 	public void shootMissile(int x, int y) throws NoBasesLeftException {
 		logic.shootAllytMissile(x, y);
 	}
 
+	/**
+	 * Sends the order to the model to aim a gun to the point (x,y)
+	 * 
+	 * @param x
+	 *            x axis coordinate
+	 * @param y
+	 *            y axis coordinate
+	 * @throws NoBasesLeftException
+	 *             when there is no bases left so none could aim to the point.
+	 */
 	public void aimGun(int x, int y) throws NoBasesLeftException {
 		logic.aimGun(x, y);
 	}
