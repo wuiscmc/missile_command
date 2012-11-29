@@ -53,7 +53,7 @@ public class GameEngine implements GameElementObserver {
 	 * inversely on this value.
 	 * 
 	 */
-	private static double ENEMY_SHOOTING_FACTOR = 99.5;
+	private static double ENEMY_SHOOTING_FACTOR = 98.5;
 
 	/**
 	 * Defines how fast a enemy missile will travel.

@@ -95,11 +95,15 @@ public class Canvas extends JFrame implements Runnable, GameEngineObserver {
 	 */
 	public void run() {
 
-		controller.addBase(150, 400, 10, 100, 10);
-		controller.addBase(275, 400, 10, 100, 10);
-		controller.addBase(400, 400, 10, 100, 10);
+		controller.addBase(50, 430, 20, 70, 20);
+		controller.addBase(275, 420, 20, 80, 20);
+		controller.addBase(400, 420, 20, 80, 20);
 
-		controller.addCity(50, 450, 50, 50);
+		controller.addCity(120, 450, 50, 50);
+		controller.addCity(210, 450, 50, 50);
+		controller.addCity(310, 450, 50, 50);
+		controller.addCity(440, 450, 50, 50);
+		
 
 		while (!end) {
 			int ix = (int) ((Math.random() * 1000) % getWidth() - 20 + 20);
