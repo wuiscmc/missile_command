@@ -16,7 +16,6 @@ import org.missile.model.template.GameElementTracker;
  * 
  * @author luizcarlos
  * @see Missile
- * @see GameElement
  * @see GameElementTracker
  */
 public class MissilesTracker extends GameElementTracker {
@@ -59,7 +58,7 @@ public class MissilesTracker extends GameElementTracker {
 	 * 
 	 * @param iterator
 	 *            over the list of elements to be checked for impact.
-	 * @return the list of {@MissileHitable} which have
+	 * @return the list of {@link MissileHitable} which have
 	 *         impacted with a missile
 	 */
 	public List<MissileHitable> hits(Iterator iterator) {

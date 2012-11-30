@@ -28,14 +28,14 @@ import org.missile.model.missile.Missile;
  * @author Luis Carlos Mateos
  * 
  */
-
 public class Canvas extends JFrame implements Runnable, GameEngineObserver {
 
 	private Image img;
 	private Graphics dbg;
 	private GameController controller;
 	private List<Drawable> screenElement;
-	private boolean end; 
+	private boolean end;
+
 	/**
 	 * Constructor of the class
 	 * 
@@ -61,10 +61,9 @@ public class Canvas extends JFrame implements Runnable, GameEngineObserver {
 		 */
 		addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent event) {
-				try{
+				try {
 					controller.shootMissile(event.getX(), event.getY());
-				}
-				catch(NoBasesLeftException exception){
+				} catch (NoBasesLeftException exception) {
 					end = true;
 				}
 			};
@@ -78,10 +77,9 @@ public class Canvas extends JFrame implements Runnable, GameEngineObserver {
 		addMouseMotionListener(new MouseAdapter() {
 			@Override
 			public void mouseMoved(MouseEvent e) {
-				try{
+				try {
 					controller.aimGun(e.getX(), e.getY());
-				}
-				catch(NoBasesLeftException exception){
+				} catch (NoBasesLeftException exception) {
 					end = true;
 				}
 			}
@@ -103,7 +101,6 @@ public class Canvas extends JFrame implements Runnable, GameEngineObserver {
 		controller.addCity(210, 450, 50, 50);
 		controller.addCity(310, 450, 50, 50);
 		controller.addCity(440, 450, 50, 50);
-		
 
 		while (!end) {
 			int ix = (int) (Math.random() * getWidth());
@@ -116,7 +113,7 @@ public class Canvas extends JFrame implements Runnable, GameEngineObserver {
 				e.printStackTrace();
 			}
 		}
-		
+
 	}
 
 	/**
@@ -151,9 +148,8 @@ public class Canvas extends JFrame implements Runnable, GameEngineObserver {
 			for (int i = 0; i < screenElement.size(); i++) {
 				drawElement(g, screenElement.get(i));
 			}
-		}
-		else{
-			dbg.drawString("Game over", getWidth()/2 - 20 , getHeight()/2 );
+		} else {
+			dbg.drawString("Game over", getWidth() / 2 - 20, getHeight() / 2);
 		}
 		repaint();
 	}

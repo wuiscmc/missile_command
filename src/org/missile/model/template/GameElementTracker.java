@@ -76,12 +76,12 @@ public class GameElementTracker implements Iterable<GameElement> {
 	 * It notifies to the observers about a new element was added to the
 	 * collection
 	 * 
-	 * @param b
+	 * @param gameElement
 	 *            {@link GameElement} added
 	 */
-	public void notifyAdded(GameElement b) {
+	public void notifyAdded(GameElement gameElement) {
 		for (GameElementObserver observer : observers) {
-			observer.addedGameElement(b);
+			observer.addedGameElement(gameElement);
 		}
 	}
 
@@ -89,12 +89,12 @@ public class GameElementTracker implements Iterable<GameElement> {
 	 * It notifies to the observers about an element was removed from the
 	 * collection
 	 * 
-	 * @param b
+	 * @param gameElement
 	 *            {@link GameElement} removed
 	 */
-	public void notifyRemoved(GameElement b) {
+	public void notifyRemoved(GameElement gameElement) {
 		for (GameElementObserver observer : observers) {
-			observer.removedGameElement(b);
+			observer.removedGameElement(gameElement);
 		}
 	}
 
@@ -102,7 +102,7 @@ public class GameElementTracker implements Iterable<GameElement> {
 	 * Allows to a {@link GameElementObserver} to subscribe to the notifications
 	 * of this class
 	 * 
-	 * @param b
+	 * @param observer
 	 *            {@link GameElementObserver} to subscribe 
 	 */
 	public void addObserver(GameElementObserver observer) {
@@ -113,7 +113,7 @@ public class GameElementTracker implements Iterable<GameElement> {
 	/**
 	 * Removes a {@link GameElementObserver} from the susbcription list
 	 * 
-	 * @param b
+	 * @param oberserver
 	 *            {@link GameElementObserver} to remove 
 	 */
 	public void removeObserver(GameElementObserver observer) {

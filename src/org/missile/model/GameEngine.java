@@ -31,13 +31,12 @@ import org.missile.model.template.GameElementTracker;
  */
 
 public class GameEngine implements GameElementObserver {
-	
-	
+
 	private GameElementTracker cities;
 	private BaseTracker bases;
-	private ExplosionsTracker explosions; 
-	private MissilesTracker missiles; 
-	
+	private ExplosionsTracker explosions;
+	private MissilesTracker missiles;
+
 	/**
 	 * List which contains the observers of the events which occur in the game.
 	 * These observers will be notified when an ally or enemy missile is
@@ -66,21 +65,20 @@ public class GameEngine implements GameElementObserver {
 	 */
 	private static double ALLY_MISSILE_DEFAULT_SPEED = 5;
 
-
 	public GameEngine() {
-		
+
 		observers = new Vector<GameEngineObserver>();
-		
+
 		cities = new GameElementTracker();
 		bases = new BaseTracker();
 		explosions = new ExplosionsTracker();
 		missiles = new MissilesTracker();
-		
+
 		bases.addObserver(this);
 		explosions.addObserver(this);
 		cities.addObserver(this);
 		missiles.addObserver(this);
-		missiles.addObserver(explosions);	
+		missiles.addObserver(explosions);
 	}
 
 	/**
@@ -112,22 +110,21 @@ public class GameEngine implements GameElementObserver {
 	}
 
 	/**
-	 * Checks the status of the game: explosions, missiles hits, etc. 
+	 * Checks the status of the game: explosions, missiles hits, etc.
 	 */
 	public void checkGameStatus() {
 		missiles.check();
 		explosions.check();
-		
-		List citiesHit  = missiles.hits(cities.iterator());
+
+		List citiesHit = missiles.hits(cities.iterator());
 		cities.removeAll(citiesHit);
-		
+
 		List explosionsHit = missiles.hits(explosions.iterator());
 		explosions.removeAll(explosionsHit);
-		
-		List basesHit  = missiles.hits(bases.iterator());
+
+		List basesHit = missiles.hits(bases.iterator());
 		bases.removeAll(basesHit);
 	}
-
 
 	/**
 	 * Shoots an enemy missile with an uncertain probability.
@@ -158,6 +155,7 @@ public class GameEngine implements GameElementObserver {
 
 	/**
 	 * Shoots an enemy missile with the default parameters
+	 * 
 	 * @param x0
 	 * @param y0
 	 * @param x1
@@ -168,7 +166,6 @@ public class GameEngine implements GameElementObserver {
 				ENEMY_MISSILE_DEFAULT_SPEED);
 	}
 
-
 	/**
 	 * Shoots from the closest base an ally missile at one given point.
 	 * 
@@ -176,12 +173,12 @@ public class GameEngine implements GameElementObserver {
 	 *            x axis coordinate of the shooting point
 	 * @param y
 	 *            y axis coordinate of the shooting point
-	 * @throws NoBasesLeftException 
+	 * @throws NoBasesLeftException
 	 */
 	public void shootAllytMissile(int x, int y) throws NoBasesLeftException {
-		missiles.add(bases.shootFromClosestBase(x,y));
+		missiles.add(bases.shootFromClosestBase(x, y));
 	}
-	
+
 	/**
 	 * Gives the order to the closest base to load its gun and aim to a given
 	 * coordinates.
@@ -190,13 +187,12 @@ public class GameEngine implements GameElementObserver {
 	 *            destination x axis coordinate
 	 * @param y
 	 *            destination y axis coordinate
-	 * @throws NoBasesLeftException 
+	 * @throws NoBasesLeftException
 	 */
 	public void aimGun(int x, int y) throws NoBasesLeftException {
 		bases.aimGun(x, y);
 	}
-	
-	
+
 	/**
 	 * Observable model helpers
 	 */
@@ -220,13 +216,11 @@ public class GameEngine implements GameElementObserver {
 		observers.remove(observer);
 	}
 
-	
-
 	@Override
 	public void addedGameElement(GameElement c) {
 		for (GameEngineObserver observer : observers)
 			observer.newElement(c);
-		
+
 	}
 
 	@Override

@@ -16,7 +16,6 @@ import org.missile.view.Canvas;
  * 
  */
 public class GameController {
-
 	private GameEngine logic;
 	private Canvas canvas;
 
