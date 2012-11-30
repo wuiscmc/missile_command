@@ -3,7 +3,6 @@ package org.missile.model.city;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
-import org.missile.model.base.Base;
 import org.missile.model.city.City;
 import org.missile.model.missile.Missile;
 

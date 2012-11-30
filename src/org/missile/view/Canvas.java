@@ -60,6 +60,7 @@ public class Canvas extends JFrame implements Runnable, GameEngineObserver {
 		 * keyboard would not be a problem
 		 */
 		addMouseListener(new MouseAdapter() {
+			@Override
 			public void mousePressed(MouseEvent event) {
 				try {
 					controller.shootMissile(event.getX(), event.getY());
@@ -91,6 +92,7 @@ public class Canvas extends JFrame implements Runnable, GameEngineObserver {
 	 * Displays the different game elements on the screen.
 	 * 
 	 */
+	@Override
 	public void run() {
 
 		controller.addBase(50, 430, 20, 70, 20);
@@ -129,6 +131,7 @@ public class Canvas extends JFrame implements Runnable, GameEngineObserver {
 	 * >Double buffering documentation</a>
 	 * 
 	 */
+	@Override
 	public void paint(Graphics g) {
 		img = createImage(getWidth(), getHeight());
 		dbg = img.getGraphics();
@@ -194,6 +197,7 @@ public class Canvas extends JFrame implements Runnable, GameEngineObserver {
 	 * @param d
 	 *            {@link Drawable} object to be added to the canvas
 	 */
+	@Override
 	public void newElement(Drawable d) {
 		if (screenElement == null)
 			screenElement = new Vector<Drawable>();
@@ -206,6 +210,7 @@ public class Canvas extends JFrame implements Runnable, GameEngineObserver {
 	 * @param d
 	 *            {@link Drawable} object to be removed
 	 */
+	@Override
 	public void removeElement(Drawable d) {
 		screenElement.remove(d);
 	}
@@ -216,6 +221,7 @@ public class Canvas extends JFrame implements Runnable, GameEngineObserver {
 	 * @param list
 	 *            List of {@link Drawable} to be removed
 	 */
+	@Override
 	public void removeElementCollection(List<Drawable> list) {
 		screenElement.removeAll(list);
 	}

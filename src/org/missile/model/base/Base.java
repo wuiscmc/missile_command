@@ -3,7 +3,6 @@ package org.missile.model.base;
 import org.missile.model.missile.Missile;
 import org.missile.model.missile.MissileHitable;
 import org.missile.model.template.GameElement;
-import org.missile.view.Drawable;
 
 /**
  * Represents a base in the system.

@@ -2,9 +2,6 @@ package org.missile.model.missile;
 
 import static org.junit.Assert.*;
 
-import java.util.List;
-import java.util.Vector;
-
 import org.junit.Test;
 import org.missile.model.city.City;
 import org.missile.model.explosion.ExplosionsTracker;

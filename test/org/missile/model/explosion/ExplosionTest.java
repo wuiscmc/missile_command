@@ -4,7 +4,6 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 import org.missile.model.explosion.Explosion;
-import org.missile.model.missile.Missile;
 
 public class ExplosionTest {
 

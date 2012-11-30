@@ -21,8 +21,8 @@ public class BaseTest {
 		
 		b.aimGun(gundx, gundy);
 		
-		assertEquals((int) guncx, (int) b.getGunCX());
-		assertEquals((int) guncy, (int) b.getGunCY());
+		assertEquals((int) guncx, b.getGunCX());
+		assertEquals((int) guncy, b.getGunCY());
 	}
 
 	@Test

@@ -13,6 +13,7 @@ public class NoBasesLeftException extends Exception {
 	/**
 	 * It prints a message stating that there are no bases.
 	 */
+	@Override
 	public String toString() {
 		return "Exception: There are no bases left. Game over";
 	}

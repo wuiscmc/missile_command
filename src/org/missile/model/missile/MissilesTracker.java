@@ -4,7 +4,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
-import org.missile.model.base.Base;
 import org.missile.model.template.GameElementTracker;
 
 /**

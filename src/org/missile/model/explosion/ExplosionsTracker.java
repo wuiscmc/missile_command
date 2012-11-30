@@ -1,6 +1,5 @@
 package org.missile.model.explosion;
 
-import org.missile.model.base.Base;
 import org.missile.model.missile.Missile;
 import org.missile.model.template.GameElement;
 import org.missile.model.template.GameElementObserver;

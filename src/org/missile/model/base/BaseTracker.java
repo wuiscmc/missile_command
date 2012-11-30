@@ -1,9 +1,6 @@
 package org.missile.model.base;
 
 import java.util.Iterator;
-import java.util.List;
-import java.util.Vector;
-
 import org.missile.model.missile.Missile;
 import org.missile.model.template.GameElement;
 import org.missile.model.template.GameElementTracker;

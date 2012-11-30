@@ -1,11 +1,7 @@
 package org.missile.model.missile;
 
-import java.util.List;
-import java.util.Vector;
-
 import org.missile.model.explosion.Explosion;
 import org.missile.model.template.GameElement;
-import org.missile.view.Drawable;
 
 /**
  * Logic representation for a missile.
