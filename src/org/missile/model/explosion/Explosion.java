@@ -90,6 +90,15 @@ public class Explosion extends GameElement implements MissileHitable {
 		return r;
 	}
 
+	/**
+	 * @return the MAXIMUM_EXPLOSION_RADIUS value
+	 * 
+	 */
+	public static int getMaxiumExplosionRadius(){
+		return MAXIMUM_EXPLOSION_RADIUS;
+	}
+	
+	
 	@Override
 	public boolean reached(Missile m) {
 		boolean contains = false;

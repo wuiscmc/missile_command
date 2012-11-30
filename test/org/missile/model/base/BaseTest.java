@@ -1,4 +1,4 @@
-package org.missile.model;
+package org.missile.model.base;
 
 import static org.junit.Assert.*;
 

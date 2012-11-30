@@ -66,6 +66,13 @@ public class GameElementTracker implements Iterable<GameElement> {
 	}
 
 	/**
+	 * @return integer. the size of the collection list
+	 */
+	public int size(){
+		return elements.size();
+	}
+	
+	/**
 	 * It notifies to the observers about a new element was added to the
 	 * collection
 	 * 
